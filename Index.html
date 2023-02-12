@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Created By The UpDoge</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.119.1/build/three.js"></script>
+    <script>
+      <script>
+  var scene, camera, renderer, text;
+  init();
+  animate();
+
+  function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    var loader = new THREE.FontLoader();
+    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+      var geometry = new THREE.TextGeometry('Created By The UpDoge!', {
+        font: font,
+        size: 80,
+        height: 5,
+        curveSegments: 12,
+        bevelEnabled: true,
+        bevelThickness: 10,
+        bevelSize: 8,
+        bevelSegments: 5
+      });
+      var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      text = new THREE.Mesh(geometry, material);
+      scene.add(text);
+    });
+
+    camera.position.z = 500;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    text.rotation.x += 0.01;
+    text.rotation.y += 0.01;
+    renderer.render(scene, camera);
+  }
+</script>
+
+    </script>
+  </body>
+</html>
