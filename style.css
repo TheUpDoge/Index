@@ -9,6 +9,7 @@ body {
   font-size: 16px;
   background-color: #8cbcfc;
   color: #fc5204;
+  text-shadow: 1px 1px #000000;
 }
 
 nav {
@@ -45,10 +46,26 @@ main {
 h1 {
   font-size: 48px;
   margin-top: 0;
+  text-shadow: 0 0 20px rgba(90, 196, 254, 0.5), 0 0 40px rgba(90, 196, 254, 0.3), 0 0 80px rgba(90, 196, 254, 0.1);
+
+}
+
+h2 {
+  font-size: 36px;
+  font-family: 'Press Start 2P', cursive;
+  text-shadow: 2px 2px #000000;
+}
+
+h3 {
+  font-size: 24px;
+  font-family: 'Roboto', sans-serif;
+  text-shadow: 1px 1px #000000;
 }
 
 p {
   font-size: 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  text-shadow: 1px 1px #000000;
 }
 
 button {
@@ -60,11 +77,20 @@ button {
   font-size: 16px;
   margin-top: 20px;
   cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  text-shadow: 1px 1px #000000;
+  box-shadow: 3px 3px #000000;
 }
 
 @media screen and (max-width: 600px) {
   h1 {
     font-size: 36px;
+  }
+  h2 {
+    font-size: 28px;
+  }
+  h3 {
+    font-size: 20px;
   }
   p {
     font-size: 18px;
@@ -74,6 +100,12 @@ button {
 @media screen and (max-width: 400px) {
   h1 {
     font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  h3 {
+    font-size: 16px;
   }
   p {
     font-size: 16px;
