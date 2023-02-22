@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JSON Data Viewer</title>
+    <script src="main.js"></script>
+  </head>
+  <body onload="changeBackgroundColor()">
+    <h1>JSON Data Viewer</h1>
+    <p>Click on a JSON file to view its contents:</p>
+    <ul>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/Map078TRANSLATED!.json" target="_blank">Example 1</a></li>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/example2.json" target="_blank">Example 2</a></li>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/example3.json" target="_blank">Example 3</a></li>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/example4.json" target="_blank">Example 4</a></li>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/example5.json" target="_blank">Example 5</a></li>
+      <li><a href="https://raw.githubusercontent.com/TheUpDoge/Index/main/FWS%20Jsons/example6.json" target="_blank">Example 6</a></li>
+    </ul>
+  </body>
