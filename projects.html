@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Mitchel Friend</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <div id="background-canvas"></div>
+  
+  <header>
+    <div class="logo">
+      <div class="logo-text">MF</div>
+      <div class="logo-grid"></div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="projects-hero">
+      <div class="glitch-container">
+        <h1 class="glitch" data-text="MY PROJECTS">MY PROJECTS</h1>
+      </div>
+      <div class="geometric-divider"></div>
+      <p class="intro">Explore my portfolio of projects, from game development to web applications.</p>
+    </section>
+
+    <section class="project-showcase" id="fws">
+      <div class="project-card featured">
+        <div class="project-image">
+          <div class="image-glitch-effect">
+            <img src="https://steamcdn-a.akamaihd.net/steam/apps/2301370/header.jpg" alt="Fantasy World Souls">
+          </div>
+        </div>
+        <div class="project-info">
+          <h3>Fantasy World Souls</h3>
+          <div class="project-tags">
+            <span class="tag">Game Development</span>
+            <span class="tag">RPG</span>
+            <span class="tag">Souls-like</span>
+          </div>
+          <p>Fantasy World Souls is a challenging RPG game that combines classic RPG elements with souls-like difficulty. The game features a unique combat system, intricate level design, and a deep narrative experience.</p>
+          <div class="project-details">
+            <div class="detail-item">
+              <span class="detail-label">Platform:</span>
+              <span class="detail-value">PC (Steam)</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Engine:</span>
+              <span class="detail-value">RPG Maker with Custom Scripts</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Role:</span>
+              <span class="detail-value">Lead Developer</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/" class="btn btn-primary" target="_blank">View on Steam</a>
+            <a href="https://github.com/TheUpDoge/FWS" class="btn btn-secondary" target="_blank">GitHub Repository</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="github-projects">
+      <h2 class="section-title">GitHub Projects</h2>
+      <div class="geometric-divider"></div>
+      
+      <div class="projects-grid">
+        <!-- AI Continuity Anchor - Featured GitHub Project -->
+        <div class="github-card featured-github-card">
+          <div class="github-card-header">
+            <div class="github-icon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+            </div>
+            <h3>AI Continuity Anchor</h3>
+            <span class="featured-tag">Featured Project</span>
+          </div>
+          <div class="github-card-body">
+            <p>A revolutionary tool designed to maintain continuity in AI conversations across sessions. This project creates a persistent memory system that allows AI assistants to remember context and previous interactions, enabling more coherent and personalized experiences.</p>
+            <div class="tech-stack">
+              <span class="tech">Python</span>
+              <span class="tech">AI</span>
+              <span class="tech">NLP</span>
+              <span class="tech">Vector Databases</span>
+              <span class="tech">Machine Learning</span>
+            </div>
+            <div class="project-highlights">
+              <h4>Key Features:</h4>
+              <ul>
+                <li>Persistent memory across conversation sessions</li>
+                <li>Context-aware retrieval of previous interactions</li>
+                <li>Semantic understanding of conversation history</li>
+                <li>Customizable memory retention parameters</li>
+                <li>Privacy-focused design with local storage options</li>
+              </ul>
+            </div>
+          </div>
+          <div class="github-card-footer">
+            <a href="https://github.com/TheUpDoge/Ai-Continuity-Anchor" class="btn btn-primary" target="_blank">View Repository</a>
+            <a href="g:/Mitch's Projects and such/Webpage/Ai-Continuity-Anchor-main" class="btn btn-secondary">Local Documentation</a>
+          </div>
+        </div>
+        
+        <!-- GitHub Project 1 -->
+        <div class="github-card">
+          <div class="github-card-header">
+            <div class="github-icon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+            </div>
+            <h3>Portfolio Website</h3>
+          </div>
+          <div class="github-card-body">
+            <p>My personal portfolio website featuring vaporwave aesthetics, Three.js animations, and responsive design.</p>
+            <div class="tech-stack">
+              <span class="tech">HTML5</span>
+              <span class="tech">CSS3</span>
+              <span class="tech">JavaScript</span>
+              <span class="tech">Three.js</span>
+            </div>
+          </div>
+          <div class="github-card-footer">
+            <a href="https://github.com/TheUpDoge/Index" class="btn btn-outline" target="_blank">View Repository</a>
+          </div>
+        </div>
+        
+        <!-- GitHub Project 2 -->
+        <div class="github-card">
+          <div class="github-card-header">
+            <div class="github-icon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+            </div>
+            <h3>RPG Maker Translation Tools</h3>
+          </div>
+          <div class="github-card-body">
+            <p>A set of tools for translating RPG Maker games, with a focus on Portuguese to English translations.</p>
+            <div class="tech-stack">
+              <span class="tech">JavaScript</span>
+              <span class="tech">Node.js</span>
+              <span class="tech">JSON</span>
+            </div>
+          </div>
+          <div class="github-card-footer">
+            <a href="https://github.com/TheUpDoge/RPGMakerTranslation" class="btn btn-outline" target="_blank">View Repository</a>
+          </div>
+        </div>
+        
+        <!-- GitHub Project 3 -->
+        <div class="github-card">
+          <div class="github-card-header">
+            <div class="github-icon">
+              <svg viewBox="0 0 16 16" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+            </div>
+            <h3>Game Modding Tools</h3>
+          </div>
+          <div class="github-card-body">
+            <p>A collection of tools and scripts for modding various games, enhancing gameplay and adding new features.</p>
+            <div class="tech-stack">
+              <span class="tech">C#</span>
+              <span class="tech">Lua</span>
+              <span class="tech">JSON</span>
+            </div>
+          </div>
+          <div class="github-card-footer">
+            <a href="https://github.com/TheUpDoge/GameMods" class="btn btn-outline" target="_blank">View Repository</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="other-projects">
+      <h2 class="section-title">Other Projects</h2>
+      <div class="geometric-divider"></div>
+      
+      <div class="projects-grid">
+        <!-- Other Project 1 -->
+        <div class="project-card small">
+          <div class="project-image">
+            <div class="image-glitch-effect">
+              <img src="https://theupdoge.itch.io/fantasy-world-souls/cover-image.png" alt="Itch.io Projects">
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Itch.io Games</h3>
+            <p>Check out my game development experiments and smaller projects on Itch.io.</p>
+            <div class="project-links">
+              <a href="https://theupdoge.itch.io" class="btn btn-outline" target="_blank">Visit Itch.io</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Other Project 2 -->
+        <div class="project-card small">
+          <div class="project-image">
+            <div class="image-glitch-effect">
+              <img src="https://via.placeholder.com/400x200/1a1a2e/00ffff?text=Game+Jams" alt="Game Jams">
+            </div>
+          </div>
+          <div class="project-info">
+            <h3>Game Jam Entries</h3>
+            <p>Games created during various game jams, showcasing rapid prototyping and creative problem-solving.</p>
+            <div class="project-links">
+              <a href="#" class="btn btn-outline" target="_blank">Coming Soon</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">MF</div>
+      <div class="footer-links">
+        <a href="https://github.com/TheUpDoge" target="_blank">GitHub</a>
+        <a href="https://theupdoge.itch.io" target="_blank">Itch.io</a>
+        <a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/" target="_blank">Steam</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2023 Mitchel Friend. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,33 @@
+**Technique**: AI Continuity Anchor  
+**Purpose**: To ensure seamless continuity and recovery for long-term or complex AI-assisted projects.
+
+**Project**: [Insert project name or description, e.g., "Analysis of Historical Documents"]  
+**Objective**: [State the goal, e.g., "Create a structured index of key information from documents"]  
+
+**Process Overview**:  
+1. [Describe the first step, e.g., "Index each document for dates, people, and keywords"]  
+2. [Describe the second step, e.g., "Generate a JSON output for each file"]  
+3. [Add more steps as needed]  
+4. [Include how to track progress, e.g., "Update a Master Index file with each batch"]  
+5. [Specify user input expectations, e.g., "User provides files or links, along with a Master Index"]  
+6. [Note any future plans, e.g., "Plan for automation in a separate session"]  
+
+**Current Status (as of [date])**:  
+- [Summarize progress, e.g., "Processed 10 files, identified 50 keywords"]  
+- [Note next steps, e.g., "Awaiting user to provide next batch of files"]  
+
+**Instructions for AI**:  
+- If provided with this file, use it to resume the project. Check any accompanying tracking files (e.g., Master Index) to confirm the last processed step.  
+- Follow the process outlined above to continue the project.  
+- Update any tracking files as specified.  
+- Respond to user requests for adjustments (e.g., "Focus on specific keywords") or deeper analysis.  
+- Be prepared to pivot to related tasks (e.g., automation design) if requested.
+
+**Usage Example**:  
+A user analyzing a large dataset might create an AI Continuity Anchor to track progress across multiple sessions. If the conversation ends, they can start a new session, provide the Anchor file, and the AI will resume exactly where it left off, using the same process and updating the same tracking files.
+
+**Tips for Users**:  
+- Keep the Anchor file updated with the latest status before ending a session.  
+- Include any tracking files (e.g., a Master Index) when restarting to ensure accuracy.  
+- Use clear, specific language in the process overview to avoid ambiguity.  
+- Share the Anchor file across sessions or with collaborators to maintain consistency.

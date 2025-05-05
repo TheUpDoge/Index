@@ -1,26 +1,134 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Games for Gamers - About</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="main.js"></script>
-  </head>
-  <body>
-    <body onload="changeBackgroundColor()"></body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Mitchel Friend</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <div id="background-canvas"></div>
+  
+  <header>
+    <div class="logo">
+      <div class="logo-text">MF</div>
+      <div class="logo-grid"></div>
+    </div>
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="json.html">JSON Data</a></li>
-        <li><a href="Example.html">Example HTML</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
-    <main>
-      <h1>About Us</h1>
-      <h2>Welcome to Games for Gamers!</h2>
-      <p>We are a video game company that creates games for gamers, by gamers. Our first game, <li><a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/">Fantasy World Souls</a></li>, is now available on Steam!</p>
-      <p>Check out<li><a href="https://theupdoge.itch.io">My Itch.IO</a></li> </p>
-    </main>
-  </body>
+  </header>
+
+  <main>
+    <section class="about-hero">
+      <div class="glitch-container">
+        <h1 class="glitch" data-text="ABOUT ME">ABOUT ME</h1>
+      </div>
+      <div class="geometric-divider"></div>
+    </section>
+
+    <section class="about-content">
+      <div class="about-grid">
+        <div class="about-image">
+          <div class="image-frame">
+            <div class="image-glitch-effect">
+              <img src="https://via.placeholder.com/400x500/1a1a2e/ff00ff?text=Mitchel+Friend" alt="Mitchel Friend">
+            </div>
+          </div>
+        </div>
+        <div class="about-text">
+          <h2 class="section-title">Who I Am</h2>
+          <div class="geometric-divider"></div>
+          <p>Hello! I'm Mitchel Friend, also known as TheUpDoge or AltF4U in various online communities. I'm a passionate game developer, programmer, and digital artist with a love for creating immersive experiences.</p>
+          
+          <p>My journey in game development began with a fascination for how games could transport players to different worlds and tell compelling stories. This led me to explore various game engines and programming languages, eventually creating my own games.</p>
+          
+          <p>I'm the developer behind <a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/" target="_blank">Fantasy World Souls</a>, a challenging RPG that combines classic RPG elements with souls-like difficulty. The game is available on Steam and represents my approach to game design: challenging but rewarding experiences with depth and narrative.</p>
+          
+          <p>When I'm not coding or designing games, I enjoy exploring new technologies, contributing to open-source projects, and connecting with other developers in the community.</p>
+          
+          <div class="about-links">
+            <a href="https://github.com/TheUpDoge" class="btn btn-secondary" target="_blank">GitHub</a>
+            <a href="https://theupdoge.itch.io" class="btn btn-secondary" target="_blank">Itch.io</a>
+            <a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/" class="btn btn-secondary" target="_blank">Steam</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline">
+      <h2 class="section-title">My Journey</h2>
+      <div class="geometric-divider"></div>
+      
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2018</div>
+          <div class="timeline-content">
+            <h3>Started Game Development</h3>
+            <p>Began learning game development fundamentals and created my first small game prototypes.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2020</div>
+          <div class="timeline-content">
+            <h3>First Game Jam</h3>
+            <p>Participated in my first game jam, creating a complete game in 48 hours.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2021</div>
+          <div class="timeline-content">
+            <h3>Started Fantasy World Souls</h3>
+            <p>Began development on my most ambitious project, combining classic RPG elements with souls-like difficulty.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2022</div>
+          <div class="timeline-content">
+            <h3>Launched on Steam</h3>
+            <p>Successfully launched Fantasy World Souls on Steam, reaching players worldwide.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">2023</div>
+          <div class="timeline-content">
+            <h3>Expanding Horizons</h3>
+            <p>Working on new projects and expanding my skills in web development and 3D graphics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">MF</div>
+      <div class="footer-links">
+        <a href="https://github.com/TheUpDoge" target="_blank">GitHub</a>
+        <a href="https://theupdoge.itch.io" target="_blank">Itch.io</a>
+        <a href="https://store.steampowered.com/app/2301370/Fantasy_World_Souls/" target="_blank">Steam</a>
+      </div>
+      <div class="footer-copyright">
+        &copy; 2023 Mitchel Friend. All rights reserved.
+      </div>
+    </div>
+  </footer>
+</body>
 </html>
