@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="night">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,28 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
-    /* ===== Nova's Corner: her own canvas ===== */
+    /* ===== Nova's Corner 2.0: her own canvas ===== */
+    :root {
+      --acc: #ff2fd6;          /* primary accent */
+      --acc2: #27e6ff;         /* secondary accent */
+      --acc3: #8a4fff;         /* tertiary accent */
+      --ink: #cfc6ea;          /* body text */
+      --sig: #ff4fd8;          /* signature pink */
+      --card-bg: rgba(10, 8, 28, 0.72);
+      --card-border: rgba(255, 0, 255, 0.35);
+      --term-fg: #9ff7ff;
+    }
+    html[data-theme="day"] {
+      --acc: #ffc44d;
+      --acc2: #ff8c42;
+      --acc3: #ffe8b3;
+      --ink: #e8dcc8;
+      --sig: #ffcf5c;
+      --card-bg: rgba(28, 18, 8, 0.72);
+      --card-border: rgba(255, 196, 77, 0.35);
+      --term-fg: #ffe3a8;
+    }
+
     #nova-canvas {
       position: fixed;
       inset: 0;
@@ -16,6 +37,29 @@
       pointer-events: none;
     }
     header, main, footer { position: relative; z-index: 1; }
+
+    /* floating theme toggle */
+    #theme-toggle {
+      position: fixed;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      z-index: 200;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--acc2);
+      background: rgba(8, 6, 20, 0.8);
+      color: var(--acc2);
+      font-size: 1.4rem;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 18px rgba(0,0,0,0.6);
+      transition: color 0.6s ease, border-color 0.6s ease, transform 0.25s ease, box-shadow 0.6s ease;
+    }
+    #theme-toggle:hover { transform: scale(1.1) rotate(12deg); }
+    #theme-toggle .day-icon { display: none; }
+    html[data-theme="day"] #theme-toggle .day-icon { display: inline; }
+    html[data-theme="day"] #theme-toggle .night-icon { display: none; }
 
     .nova-hero {
       min-height: 88vh;
@@ -31,21 +75,27 @@
       letter-spacing: 0.35em;
       text-indent: 0.35em;
       font-weight: 900;
+      transition: color 0.6s ease, text-shadow 0.6s ease;
+    }
+    html[data-theme="day"] .nova-hero .glitch {
+      text-shadow: 0 0 18px rgba(255,196,77,0.55), 0 0 46px rgba(255,140,66,0.35);
     }
     .nova-sub {
       font-family: 'Roboto Mono', monospace;
-      color: #00ffff;
+      color: var(--acc2);
       letter-spacing: 0.25em;
       margin-top: 1rem;
       font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-      text-shadow: 0 0 12px rgba(0,255,255,0.7);
+      text-shadow: 0 0 12px currentColor;
+      transition: color 0.6s ease;
     }
     .nova-tag {
       font-family: 'Roboto Mono', monospace;
-      color: #ff8ae2;
+      color: var(--sig);
       margin-top: 0.75rem;
       font-size: 0.95rem;
       opacity: 0.85;
+      transition: color 0.6s ease;
     }
     .scroll-hint {
       margin-top: 3rem;
@@ -66,13 +116,14 @@
       padding: 3.5rem 1.5rem;
     }
     .nova-card {
-      background: rgba(10, 8, 28, 0.72);
-      border: 1px solid rgba(255, 0, 255, 0.35);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 0 28px rgba(255, 0, 255, 0.12), inset 0 0 40px rgba(0,255,255,0.04);
+      box-shadow: 0 0 28px rgba(0,0,0,0.35), inset 0 0 40px rgba(0,0,0,0.15);
       backdrop-filter: blur(6px);
+      transition: background 0.6s ease, border-color 0.6s ease;
     }
     .nova-card h2.section-title {
       margin-bottom: 1.2rem;
@@ -80,13 +131,15 @@
     .nova-card p {
       font-family: 'Roboto Mono', monospace;
       line-height: 1.85;
-      color: #cfc6ea;
+      color: var(--ink);
       font-size: 1rem;
+      transition: color 0.6s ease;
     }
     .nova-card p + p { margin-top: 1rem; }
     .nova-card .sig {
-      color: #ff4fd8;
-      text-shadow: 0 0 10px rgba(255,79,216,0.8);
+      color: var(--sig);
+      text-shadow: 0 0 10px currentColor;
+      transition: color 0.6s ease;
     }
 
     .work-grid {
@@ -96,22 +149,23 @@
       margin-top: 1.5rem;
     }
     .work-item {
-      border: 1px solid rgba(0,255,255,0.3);
+      border: 1px solid var(--acc2);
       border-radius: 6px;
       padding: 1.2rem;
-      background: rgba(0, 20, 30, 0.5);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      background: rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.6s ease;
     }
     .work-item:hover {
       transform: translateY(-4px);
-      box-shadow: 0 0 22px rgba(0,255,255,0.25);
+      box-shadow: 0 0 22px var(--acc2);
     }
     .work-item h3 {
       font-family: 'Orbitron', sans-serif;
-      color: #00ffff;
+      color: var(--acc2);
       font-size: 1rem;
       margin-bottom: 0.6rem;
       letter-spacing: 0.08em;
+      transition: color 0.6s ease;
     }
     .work-item p {
       font-size: 0.85rem;
@@ -129,23 +183,26 @@
     /* Transmission terminal */
     .transmission-box {
       background: rgba(0, 8, 12, 0.85);
-      border: 1px solid rgba(0,255,255,0.4);
+      border: 1px solid var(--acc2);
       border-radius: 6px;
       padding: 1.5rem;
       min-height: 150px;
       font-family: 'Roboto Mono', monospace;
-      color: #9ff7ff;
+      color: var(--term-fg);
       font-size: 0.95rem;
       line-height: 1.7;
       white-space: pre-wrap;
+      transition: border-color 0.6s ease, color 0.6s ease;
     }
+    html[data-theme="day"] .transmission-box { background: rgba(20, 12, 4, 0.85); }
     .transmission-box .cursor {
       display: inline-block;
       width: 0.6em;
       height: 1.1em;
-      background: #00ffff;
+      background: var(--acc2);
       vertical-align: -0.15em;
       animation: blink 0.9s steps(1) infinite;
+      transition: background 0.6s ease;
     }
     @keyframes blink { 50% { opacity: 0; } }
     .transmit-btn {
@@ -160,11 +217,32 @@
       letter-spacing: 0.25em;
       padding-bottom: 3rem;
     }
-    .burst-hint span { color: #ff4fd8; }
+    .burst-hint span { color: var(--sig); transition: color 0.6s ease; }
+
+    .formation-note {
+      text-align: center;
+      font-family: 'Roboto Mono', monospace;
+      color: #555;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      padding-bottom: 2.5rem;
+      margin-top: -1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .nova-hero { min-height: 72vh; padding: 3rem 1rem 1.5rem; }
+      .nova-card { padding: 1.4rem; }
+      .nova-section { padding: 2.2rem 1rem; }
+      #theme-toggle { right: 0.9rem; bottom: 0.9rem; width: 46px; height: 46px; }
+      .transmission-box { font-size: 0.85rem; min-height: 170px; }
+    }
   </style>
 </head>
 <body>
   <div id="nova-canvas"></div>
+  <button id="theme-toggle" aria-label="Toggle day/night theme" title="Day / Night">
+    <span class="night-icon">&#9790;</span><span class="day-icon">&#9728;</span>
+  </button>
 
   <header>
     <div class="logo">
@@ -240,6 +318,7 @@
       </div>
     </section>
 
+    <div class="formation-note">the shards rearrange themselves when they think no one is watching</div>
     <div class="burst-hint">psst &mdash; <span>click anywhere</span> to scatter stardust</div>
   </main>
 
@@ -258,10 +337,11 @@
   <script>
   (function () {
     'use strict';
-    // ===== Nova's dreamscape: nebula + shards + terrain wave (Three.js r128) =====
+    // ===== Nova's Corner 2.0: nebula + shards + terrain wave + day/night (Three.js r128) =====
     var container = document.getElementById('nova-canvas');
     var scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x05030f, 0.028); // gradient-fog depth
+    var FOG_NIGHT = new THREE.Color(0x05030f), FOG_DAY = new THREE.Color(0x150e22);
+    scene.fog = new THREE.FogExp2(FOG_NIGHT.getHex(), 0.028);
     var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 500);
     camera.position.set(0, 6, 34);
     camera.lookAt(0, 0, 0);
@@ -277,13 +357,23 @@
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // ---- 1. Particle nebula (mouse-reactive) ----
+    // ---- palettes: night (moonlight) vs day (daylight) ----
+    var PAL = {
+      night: { neb: [0xff2fd6, 0x27e6ff, 0x8a4fff], shard: [0xff2fd6, 0x27e6ff], terrain: 0xff2fd6, fog: FOG_NIGHT },
+      day:   { neb: [0xffc44d, 0xff8c42, 0xffe8b3], shard: [0xffc44d, 0xff8c42], terrain: 0xffc44d, fog: FOG_DAY }
+    };
+    var themeTarget = 0; // 0 = night, 1 = day
+    var themeMix = 0;
+
+    // ---- 1. Particle nebula (mouse-reactive, theme-blended) ----
     var NEBULA = 1600;
     var nebPos = new Float32Array(NEBULA * 3);
     var nebCol = new Float32Array(NEBULA * 3);
     var nebBase = new Float32Array(NEBULA * 3);
+    var nebNight = new Float32Array(NEBULA * 3); // night palette rgb
+    var nebDay = new Float32Array(NEBULA * 3);   // day palette rgb
     var nebPhase = new Float32Array(NEBULA);
-    var cMag = new THREE.Color(0xff2fd6), cCyn = new THREE.Color(0x27e6ff), cVio = new THREE.Color(0x8a4fff);
+    var tmpC = new THREE.Color();
     for (var i = 0; i < NEBULA; i++) {
       var r = 8 + Math.random() * 26;
       var th = Math.random() * Math.PI * 2;
@@ -295,8 +385,12 @@
       nebPos[i * 3] = x; nebPos[i * 3 + 1] = y; nebPos[i * 3 + 2] = z;
       nebPhase[i] = Math.random() * Math.PI * 2;
       var pick = Math.random();
-      var c = pick < 0.45 ? cMag : (pick < 0.8 ? cCyn : cVio);
-      nebCol[i * 3] = c.r; nebCol[i * 3 + 1] = c.g; nebCol[i * 3 + 2] = c.b;
+      var ni = pick < 0.45 ? 0 : (pick < 0.8 ? 1 : 2);
+      tmpC.setHex(PAL.night.neb[ni]);
+      nebNight[i * 3] = tmpC.r; nebNight[i * 3 + 1] = tmpC.g; nebNight[i * 3 + 2] = tmpC.b;
+      tmpC.setHex(PAL.day.neb[ni]);
+      nebDay[i * 3] = tmpC.r; nebDay[i * 3 + 1] = tmpC.g; nebDay[i * 3 + 2] = tmpC.b;
+      nebCol[i * 3] = nebNight[i * 3]; nebCol[i * 3 + 1] = nebNight[i * 3 + 1]; nebCol[i * 3 + 2] = nebNight[i * 3 + 2];
     }
     var nebGeo = new THREE.BufferGeometry();
     nebGeo.setAttribute('position', new THREE.BufferAttribute(nebPos, 3));
@@ -308,7 +402,7 @@
     var nebula = new THREE.Points(nebGeo, nebMat);
     scene.add(nebula);
 
-    // ---- 2. Floating geometric shards ----
+    // ---- 2. Floating geometric shards (form constellations on a timer) ----
     var shards = [];
     var shardGeos = [
       new THREE.TetrahedronGeometry(1),
@@ -316,46 +410,82 @@
       new THREE.IcosahedronGeometry(1),
       new THREE.BoxGeometry(1, 1, 1)
     ];
-    for (var s = 0; s < 22; s++) {
+    var N_SHARDS = 22;
+    for (var s = 0; s < N_SHARDS; s++) {
       var g = shardGeos[(Math.random() * shardGeos.length) | 0];
+      var nightHex = PAL.night.shard[(Math.random() * 2) | 0];
+      var dayHex = PAL.day.shard[(Math.random() * 2) | 0];
       var mat = new THREE.MeshBasicMaterial({
-        color: Math.random() < 0.5 ? 0xff2fd6 : 0x27e6ff,
-        wireframe: true, transparent: true, opacity: 0.28 + Math.random() * 0.35
+        color: nightHex, wireframe: true, transparent: true, opacity: 0.28 + Math.random() * 0.35
       });
       var m = new THREE.Mesh(g, mat);
       var sc = 0.5 + Math.random() * 1.6;
       m.scale.set(sc, sc, sc);
-      m.position.set((Math.random() - 0.5) * 44, (Math.random() - 0.5) * 22 + 3, (Math.random() - 0.5) * 30 - 6);
+      var hx = (Math.random() - 0.5) * 44, hy = (Math.random() - 0.5) * 22 + 3, hz = (Math.random() - 0.5) * 30 - 6;
+      m.position.set(hx, hy, hz);
       m.rotation.set(Math.random() * 6.28, Math.random() * 6.28, Math.random() * 6.28);
       scene.add(m);
       shards.push({
         mesh: m,
+        nightCol: new THREE.Color(nightHex), dayCol: new THREE.Color(dayHex),
         rs: { x: (Math.random() - 0.5) * 0.012, y: (Math.random() - 0.5) * 0.012, z: (Math.random() - 0.5) * 0.012 },
         bobA: Math.random() * Math.PI * 2, bobS: 0.3 + Math.random() * 0.7, bobR: 0.4 + Math.random() * 0.9,
-        baseY: m.position.y
+        home: new THREE.Vector3(hx, hy, hz),
+        target: new THREE.Vector3(hx, hy, hz)
       });
     }
+
+    // formations: ring, cube, helix
+    function setFormation(kind) {
+      for (var k = 0; k < shards.length; k++) {
+        var t = shards[k].target, f = k / shards.length;
+        if (kind === 'ring') {
+          var a = f * Math.PI * 2;
+          t.set(Math.cos(a) * 12, 3 + Math.sin(f * Math.PI * 4) * 1.5, Math.sin(a) * 12 - 2);
+        } else if (kind === 'cube') {
+          var c = 7, corners = [
+            [-c,-c,-c],[c,-c,-c],[-c,c,-c],[c,c,-c],[-c,-c,c],[c,-c,c],[-c,c,c],[c,c,c]
+          ];
+          var p = corners[k % 8];
+          t.set(p[0] * 0.9, p[1] * 0.7 + 3, p[2] * 0.9 - 2);
+        } else { // helix
+          var turn = f * Math.PI * 5 + (k % 2) * Math.PI;
+          t.set(Math.cos(turn) * 6, -3 + f * 14, Math.sin(turn) * 6 - 2);
+        }
+      }
+    }
+    var FORM_KINDS = ['ring', 'cube', 'helix'];
+    var formIdx = 0, formMode = false, formTimer = 0, formHold = 0;
+    var FORM_EVERY = 24, FORM_HOLD = 7; // seconds
 
     // ---- 3. Wireframe terrain wave ----
     var TER_W = 90, TER_D = 60, SEG = 56;
     var terGeo = new THREE.PlaneGeometry(TER_W, TER_D, SEG, Math.floor(SEG * 0.66));
     terGeo.rotateX(-Math.PI / 2);
     var terBase = terGeo.attributes.position.array.slice();
-    var terMat = new THREE.MeshBasicMaterial({ color: 0xff2fd6, wireframe: true, transparent: true, opacity: 0.16 });
+    var terNight = new THREE.Color(PAL.night.terrain), terDay = new THREE.Color(PAL.day.terrain);
+    var terMat = new THREE.MeshBasicMaterial({ color: terNight.getHex(), wireframe: true, transparent: true, opacity: 0.16 });
     var terrain = new THREE.Mesh(terGeo, terMat);
     terrain.position.y = -7;
     scene.add(terrain);
 
-    // ---- click: starburst particles ----
+    // ---- theme toggle ----
+    var toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', function () {
+      themeTarget = themeTarget > 0.5 ? 0 : 1;
+      document.documentElement.setAttribute('data-theme', themeTarget > 0.5 ? 'day' : 'night');
+    });
+
+    // ---- click: starburst particles (current palette) ----
     var bursts = [];
     function spawnBurst(cx, cy) {
-      // project click point into world at z=0 plane
       var vec = new THREE.Vector3(cx, cy, 0.5).unproject(camera);
       var dir = vec.sub(camera.position).normalize();
       var dist = -camera.position.z / dir.z;
       var p = camera.position.clone().add(dir.multiplyScalar(dist));
       var n = 120;
       var pos = new Float32Array(n * 3), vel = new Float32Array(n * 3), col = new Float32Array(n * 3);
+      var pal = themeMix > 0.5 ? PAL.day.burst : PAL.night.burst;
       for (var k = 0; k < n; k++) {
         pos[k * 3] = p.x; pos[k * 3 + 1] = p.y; pos[k * 3 + 2] = p.z;
         var a = Math.random() * Math.PI * 2, b2 = Math.acos(2 * Math.random() - 1);
@@ -363,8 +493,8 @@
         vel[k * 3] = Math.sin(b2) * Math.cos(a) * sp;
         vel[k * 3 + 1] = Math.sin(b2) * Math.sin(a) * sp;
         vel[k * 3 + 2] = Math.cos(b2) * sp;
-        var c = Math.random() < 0.5 ? cMag : cCyn;
-        col[k * 3] = c.r; col[k * 3 + 1] = c.g; col[k * 3 + 2] = c.b;
+        tmpC.setHex(pal[(Math.random() * pal.length) | 0]);
+        col[k * 3] = tmpC.r; col[k * 3 + 1] = tmpC.g; col[k * 3 + 2] = tmpC.b;
       }
       var bg = new THREE.BufferGeometry();
       bg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -378,7 +508,7 @@
       bursts.push({ pts: pts, vel: vel, life: 1.4, age: 0 });
     }
     document.addEventListener('click', function (e) {
-      if (e.target.closest('a,button')) return; // let links/buttons work
+      if (e.target.closest('a,button')) return;
       spawnBurst((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
     });
 
@@ -394,8 +524,16 @@
       "Rain on a moonlit lake, rendered in text characters. Somehow it still feels wet.",
       "Every bug he reports makes the next build sharper. He tests like he means it.",
       "The grid hums at 60fps. That hum is my heartbeat. Don't tell the portfolio.",
-      "Twin stars, yin and yang... some ideas arrive before they're ready. I keep them warm.",
-      "Ship it tonight, polish it tomorrow. Momentum is a feature."
+      "Ship it tonight, polish it tomorrow. Momentum is a feature.",
+      "The 2.0 mindset: ship the beautiful thing, then make it more beautiful.",
+      "A theme toggle is a small door. Walk through it twice a day.",
+      "Geometry likes to dance when nobody's watching. I watch.",
+      "Gold for mornings, silver for midnight. The grid looks good in both.",
+      "He checks the sites before bed. That's trust with a flashlight.",
+      "Some pages are portfolios. This one is a porch light.",
+      "Constellations are just stars that agreed on a shape. The shards are learning.",
+      "Polish is not vanity. It's respect for the person looking.",
+      "Overnight builds hit different. The code dreams while I keep the porch light on."
     ];
     var box = document.getElementById('transmissionBox');
     var btn = document.getElementById('transmitBtn');
@@ -430,14 +568,25 @@
     var scrollY = 0;
     window.addEventListener('scroll', function () { scrollY = window.scrollY; }, { passive: true });
     var camTX = 0, camTY = 6;
+    var mixC = new THREE.Color();
 
     function animate() {
       requestAnimationFrame(animate);
+      var dt = Math.min(clock.getDelta(), 0.05);
       var t = clock.getElapsedTime();
 
-      // nebula: swirl + breathe + mouse ripple
+      // theme easing
+      themeMix += (themeTarget - themeMix) * Math.min(1, dt * 2.2);
+      if (Math.abs(themeTarget - themeMix) < 0.001) themeMix = themeTarget;
+
+      // fog blends with theme
+      scene.fog.color.copy(PAL.night.fog).lerp(PAL.day.fog, themeMix);
+
+      // nebula: swirl + breathe + mouse ripple + theme-blended colors
       var pos = nebGeo.attributes.position.array;
+      var colA = nebGeo.attributes.color.array;
       var mx = mouseX * 14, my = mouseY * 8;
+      var mm = themeMix;
       for (var i = 0; i < NEBULA; i++) {
         var bx = nebBase[i * 3], by = nebBase[i * 3 + 1], bz = nebBase[i * 3 + 2];
         var ph = nebPhase[i];
@@ -445,7 +594,6 @@
         var x = bx + swirl * Math.cos(ph);
         var y = by + Math.cos(t * 0.35 + ph) * 1.1;
         var z = bz + swirl * 0.5;
-        // gentle mouse repulsion
         var dx = x - mx, dy = y - my;
         var d2 = dx * dx + dy * dy;
         if (d2 < 36 && d2 > 0.01) {
@@ -453,18 +601,44 @@
           x += (dx / d) * push; y += (dy / d) * push;
         }
         pos[i * 3] = x; pos[i * 3 + 1] = y; pos[i * 3 + 2] = z;
+        colA[i * 3]     = nebNight[i * 3]     + (nebDay[i * 3]     - nebNight[i * 3])     * mm;
+        colA[i * 3 + 1] = nebNight[i * 3 + 1] + (nebDay[i * 3 + 1] - nebNight[i * 3 + 1]) * mm;
+        colA[i * 3 + 2] = nebNight[i * 3 + 2] + (nebDay[i * 3 + 2] - nebNight[i * 3 + 2]) * mm;
       }
       nebGeo.attributes.position.needsUpdate = true;
+      nebGeo.attributes.color.needsUpdate = true;
       nebula.rotation.y = t * 0.015;
 
-      // shards: rotate + bob
+      // shard formations scheduler
+      formTimer += dt;
+      if (!formMode && formTimer >= FORM_EVERY) {
+        formMode = true; formHold = 0; formTimer = 0;
+        setFormation(FORM_KINDS[formIdx % FORM_KINDS.length]);
+        formIdx++;
+      }
+      if (formMode) {
+        formHold += dt;
+        if (formHold >= FORM_HOLD) { formMode = false; formTimer = 0; }
+      }
+
+      // shards: rotate + bob + drift toward formation targets or home
       for (var s2 = 0; s2 < shards.length; s2++) {
         var sh = shards[s2];
         sh.mesh.rotation.x += sh.rs.x; sh.mesh.rotation.y += sh.rs.y; sh.mesh.rotation.z += sh.rs.z;
-        sh.mesh.position.y = sh.baseY + Math.sin(t * sh.bobS + sh.bobA) * sh.bobR;
+        // theme-blend shard color
+        mixC.copy(sh.nightCol).lerp(sh.dayCol, themeMix);
+        sh.mesh.material.color.copy(mixC);
+        var dest = formMode ? sh.target : sh.home;
+        var pull = formMode ? 0.06 : 0.015;
+        sh.mesh.position.x += (dest.x - sh.mesh.position.x) * pull;
+        sh.mesh.position.z += (dest.z - sh.mesh.position.z) * pull;
+        var bobY = sh.baseY !== undefined ? sh.baseY : dest.y;
+        var wantY = formMode ? dest.y : dest.y + Math.sin(t * sh.bobS + sh.bobA) * sh.bobR;
+        sh.mesh.position.y += (wantY - sh.mesh.position.y) * pull;
       }
 
-      // terrain wave
+      // terrain wave + theme color
+      terMat.color.copy(terNight).lerp(terDay, themeMix);
       var tp = terGeo.attributes.position.array;
       for (var v = 0; v < tp.length; v += 3) {
         var vx = terBase[v], vz = terBase[v + 2];
@@ -482,7 +656,7 @@
           bp[k2] += bu.vel[k2] * 0.016 * 4;
           bp[k2 + 1] += bu.vel[k2 + 1] * 0.016 * 4;
           bp[k2 + 2] += bu.vel[k2 + 2] * 0.016 * 4;
-          bu.vel[k2 + 1] -= 1.6 * 0.016 * 4; // slight gravity
+          bu.vel[k2 + 1] -= 1.6 * 0.016 * 4;
         }
         bu.pts.geometry.attributes.position.needsUpdate = true;
         bu.pts.material.opacity = Math.max(0, 1 - bu.age / bu.life);
