@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="dark light"/>
+<link rel="icon" href="data:,">
+<title>Halloween — The Spiral Blooms · UpDoge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --bg:#07060b; --bg2:#0e0a18; --panel:#12101c; --panel2:#1a1628;
+  --ink:#f3ead6; --muted:#b8b0c9; --line:rgba(243,234,214,.16);
+  --blood:#e8262f; --accent:#00f0ff; --accent2:#ff2ea6;
+  --sun:#ffb320; --dread:1;
+  --glow: 0 0 22px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;line-height:1.55;overflow-x:hidden;transition:background 1.2s ease,color 1.2s ease}
+body.day{--bg:#efe6d0;--bg2:#e6d9bd;--panel:#f7f0dd;--panel2:#fffaf0;--ink:#171310;--muted:#5c5347;--line:rgba(23,19,16,.18)}
+a{color:var(--accent)}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+.fog{position:fixed;inset:-20%;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 30% 70%,rgba(140,80,255,.14),transparent 55%),radial-gradient(ellipse at 75% 25%,rgba(0,240,255,.10),transparent 50%);filter:blur(10px);animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-2%)}to{transform:translateX(2%) translateY(-1.5%)}}
+.scanlines{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+body.fx-scan .scanlines{opacity:.55}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 18px 70px}
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:color-mix(in srgb, var(--bg) 78%, transparent);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:10px 18px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{font-family:Cinzel,serif;font-weight:900;letter-spacing:.14em;font-size:13px;text-transform:uppercase}
+.brand b{color:var(--blood)}
+.clock{font-family:"Space Mono",monospace;font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.clock strong{color:var(--ink)}
+.btn{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 14px;border-radius:999px;font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.06em;cursor:pointer}
+.btn:active{transform:scale(.97)} .btn.on{background:var(--blood);border-color:var(--blood);color:#fff;box-shadow:0 0 18px rgba(232,38,47,.45)}
+.btn.cyan.on{background:#0899ad;border-color:#0899ad}
+.hero{padding:34px 0 10px;display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.kicker{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h1{font-family:Cinzel,serif;font-weight:900;line-height:.92;margin:0;font-size:clamp(44px,8.2vw,92px);letter-spacing:.01em;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--blood);text-shadow:0 0 28px rgba(232,38,47,.55)}
+h1 .thin{display:block;font-weight:500;font-size:.42em;letter-spacing:.32em;margin-top:12px;color:var(--muted)}
+.lede{font-size:21px;max-width:34em}
+.lede strong{color:var(--accent)}
+.countdown{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.cd{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--blood);padding:10px 14px;min-width:78px;text-align:center}
+.cd b{display:block;font-family:"Space Mono",monospace;font-size:26px;line-height:1}
+.cd span{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.hero-art{position:relative}
+.hero-art img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55), var(--glow);filter:saturate(calc(.9 + var(--dread)*.12)) contrast(calc(1 + var(--dread)*.03))}
+.frame-note{position:absolute;left:12px;bottom:12px;right:12px;display:flex;justify-content:space-between;gap:10px;font-family:"Space Mono",monospace;font-size:11px}
+.frame-note span{background:rgba(5,4,10,.82);color:#f3ead6;padding:7px 10px;border:1px solid rgba(255,255,255,.18)}
+.eye{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px 6px color-mix(in srgb,var(--accent) 70%,transparent);opacity:0;transition:opacity .4s}
+body.dread-3 .eye,body.dread-4 .eye{opacity:1;animation:pulse 2.2s infinite}
+@keyframes pulse{50%{transform:scale(1.35)}}
+section{margin-top:54px}
+.sec-head{display:flex;align-items:baseline;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px;flex-wrap:wrap}
+.sec-head h2{font-family:Cinzel,serif;font-size:clamp(26px,4vw,40px);margin:0;text-transform:uppercase;letter-spacing:.04em}
+.sec-head p{margin:0;color:var(--muted);font-family:"Space Mono",monospace;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);overflow:hidden}
+.card img{width:100%;height:260px;object-fit:cover;display:block}
+.card.pad{padding:20px}.card h3{font-family:Cinzel,serif;margin:0 0 8px;font-size:20px}
+.card p{margin:0;color:var(--muted)}
+.lab{background:var(--panel);border:1px solid var(--line);padding:22px}
+.lab-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}
+@media(max-width:860px){.lab-grid{grid-template-columns:1fr}}
+input[type=range]{width:100%;accent-color:var(--blood);height:36px}
+.phase-name{font-family:Cinzel,serif;font-size:34px;font-weight:900;line-height:1}
+.phase-desc{color:var(--muted)}
+.arc{width:100%;height:auto;display:block}
+.swatches{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.swatch{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;position:relative;display:grid;place-items:center}
+.swatch::after{content:"";width:14px;height:14px;border-radius:50%;background:#0a0a0a;box-shadow:inset 0 0 0 3px rgba(255,255,255,.15)}
+.swatch.sel{outline:3px solid var(--ink);outline-offset:3px}
+.swatch-label{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);width:100%}
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:860px){.days{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.days{grid-template-columns:1fr}}
+.day-card{text-align:left;background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--c,#888);padding:18px;cursor:pointer;color:var(--ink);font:inherit;width:100%}
+.day-card.sel{box-shadow:0 0 0 2px var(--ink),0 18px 40px rgba(0,0,0,.35)}
+.day-card .d{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.day-card h3{font-family:Cinzel,serif;margin:6px 0 8px;font-size:19px}
+.day-card p{margin:0;color:var(--muted);font-size:16px;line-height:1.45}
+.day-card .state{margin-top:12px;font-family:"Space Mono",monospace;font-size:11px;color:var(--c)}
+.toggles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:640px){.toggles{grid-template-columns:1fr}}
+.toggle{display:flex;justify-content:space-between;gap:14px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:16px}
+.toggle h3{margin:0;font-family:Cinzel,serif;font-size:17px}.toggle p{margin:2px 0 0;color:var(--muted);font-size:15px}
+.btn.mini{padding:6px 11px;font-size:11px}
+.song-card{align-items:flex-start}
+.song-layers{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.song-layers .chip{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.song-layers .chip.on{color:#fff;background:var(--blood);border-color:var(--blood);box-shadow:0 0 12px rgba(232,38,47,.35)}
+.song-layers .chip.off{opacity:.55;text-decoration:line-through}
+.song-layers .chip.soon{opacity:.6;border-style:dashed}
+.whisper{min-height:54px;display:grid;place-items:center;text-align:center;font-style:italic;font-size:24px;color:var(--accent);padding:14px;border:1px dashed var(--line);margin-top:14px;transition:opacity .6s}
+@media(max-width:760px){}
+footer{margin-top:60px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:15px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.spiral-badge{display:inline-grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;font-size:22px;animation:spin calc(14s / var(--dread)) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body class="dread-1 fx-scan">
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="fog" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar"><div class="topbar-in">
+  <div class="brand">Updoge <b>✦</b> Halloween</div>
+  <div class="clock"><span>Local <strong id="clock">--:--:--</strong></span><span>Phase <strong id="phaseTop">—</strong></span><span>Halloween <strong id="cdTop">—</strong></span></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="btn" href="index.html" style="text-decoration:none">← Hub</a>
+    <button class="btn on" id="autoBtn">◉ Auto cycle</button>
+    <button class="btn" id="dayBtn">☀ Force day</button>
+    <button class="btn" id="nightBtn">☾ Force night</button>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <p class="kicker">Oct 27 → Oct 31 · A slow transformation</p>
+      <h1>The spiral<br><em>blooms</em><br>at midnight<span class="thin">Colorized dread · Ink &amp; neon · Swords &amp; suns</span></h1>
+      <p class="lede">An homage in spirit — <strong>Junji Ito's creeping, colorized dread</strong> braided with <strong>Micah Ulrich's hatched suns, cloaks, and blades</strong> — then drowned in vapor light. One red eye burns. One green eye watches. The garden plants its swords and waits for Halloween.</p>
+      <div class="countdown" aria-label="Countdown to Halloween">
+        <div class="cd"><b id="cdD">–</b><span>Days</span></div>
+        <div class="cd"><b id="cdH">–</b><span>Hours</span></div>
+        <div class="cd"><b id="cdM">–</b><span>Minutes</span></div>
+        <div class="cd"><b id="cdS">–</b><span>Seconds</span></div>
+      </div>
+      <p style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted)">↳ Drag the hour slider below. Pick an eye. Raise the dread. This showcase <em>is</em> the theme, breathing.</p>
+    </div>
+    <div class="hero-art">
+      <img src="halloween/plate-she-watches.webp" alt="Original colorized horror-manga portrait: a pale girl with black bob hair, one burning red eye and one luminous green eye, glowing green thorn-vines crossing her face">
+      <div class="eye" style="left:12%;top:18%"></div><div class="eye" style="right:10%;top:64%;width:10px;height:10px"></div>
+      <div class="frame-note"><span>PLATE I — SHE WATCHES</span><span id="platePhase">NIGHT</span></div>
+    </div>
+  </div>
+
+  <!-- CYCLE LAB -->
+  <section id="cycle">
+    <div class="sec-head"><h2>Day / Night Cycle</h2><p>AUTO FOLLOWS YOUR CLOCK · SLIDER OVERRIDES IT</p></div>
+    <div class="lab"><div class="lab-grid">
+      <div>
+        <div class="phase-name" id="phaseName">Night</div>
+        <p class="phase-desc" id="phaseDesc"></p>
+        <label for="hourRange" style="font-family:'Space Mono',monospace;font-size:12px">HOUR OF DAY — <strong id="hourLabel">21:00</strong></label>
+        <input type="range" id="hourRange" min="0" max="23.9" step="0.1" value="21">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <button class="btn" id="playBtn">▶ Play a full day in 24s</button>
+          <button class="btn cyan" id="liveBtn">Return to live time</button>
+        </div>
+        <p style="color:var(--muted);font-size:16px">Day is not safety here — it's <em>exposure</em>. Bone paper, black ink, red rays: the Ulrich plate under noon light. Night is where the neon wakes and every eye opens.</p>
+      </div>
+      <div>
+        <svg class="arc" viewBox="0 0 320 190" role="img" aria-label="Sun and moon arc across the sky">
+          <path d="M20 160 A140 140 0 0 1 300 160" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="4 5"/>
+          <line x1="8" y1="160" x2="312" y2="160" stroke="currentColor" stroke-opacity=".35"/>
+          <circle id="orb" cx="40" cy="140" r="17" fill="#ffb320"/>
+          <text x="160" y="185" text-anchor="middle" fill="currentColor" font-family="Space Mono" font-size="10" opacity=".6">EAST — SKY ARC — WEST</text>
+        </svg>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-family:'Space Mono',monospace;font-size:12px">
+          <div style="border:1px solid var(--line);padding:10px">SKY <br><strong id="skyRead">Ink black</strong></div>
+          <div style="border:1px solid var(--line);padding:10px">3D SPIRAL <br><strong id="spiralRead">Neon, fast</strong></div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- EYES -->
+  <section id="eyes">
+    <div class="sec-head"><h2>Choose the watching eye</h2><p>RECOLOURS THE GLOW, THE WHISPERS &amp; THE 3D SPIRAL</p></div>
+    <div class="lab">
+      <div class="swatches" id="swatches"></div>
+      <p id="eyeNote" style="margin:14px 0 0;color:var(--muted)">Cyan — the lock-screen light. Cold, electric, impossible to ignore at 9:08 PM.</p>
+      <div class="whisper" id="whisper">“You felt that, didn't you? Something just looked back.”</div>
+    </div>
+  </section>
+
+  <!-- ROLLOUT -->
+  <section id="rollout">
+    <div class="sec-head"><h2>The slow reveal</h2><p>TAP A DAY TO PREVIEW ITS DREAD LEVEL — RIGHT HERE, RIGHT NOW</p></div>
+    <div class="days" id="days"></div>
+    <p style="color:var(--muted)">The full site takes this on gradually — every non-game page, day by day — until the final form lands on Halloween. Games stay untouched: too many, too intricate, and perfect as they are. <strong style="color:var(--ink)" id="dreadRead">Showcase: Level 1 — Ink.</strong></p>
+  </section>
+
+  <!-- MOTIFS -->
+  <section id="motifs">
+    <div class="sec-head"><h2>Three plates</h2><p>ORIGINAL ART MADE FOR THIS HOMAGE — IN THE SPIRIT, NEVER A COPY</p></div>
+    <div class="grid">
+      <article class="card"><img loading="lazy" src="halloween/plate-she-watches.webp" alt="Close view of the colorized portrait with red and green glowing eyes and neon thorn vines"><div class="card pad"><h3>I. She Watches</h3><p>The colorized face. Pink lashes, cracked-glass green vines, a smile that's a fraction too wide. Your lock screen's energy, made ours.</p></div></article>
+      <article class="card"><img loading="lazy" src="halloween/plate-casting.webp" alt="Black ink wizard in a star-covered cloak with red sun rays radiating behind him"><div class="card pad"><h3>II. The Casting</h3><p>The ink plate. Hatched black, bone white, and those thin red rays — the sun as a halo, the cloak as a night sky full of stars.</p></div></article>
+      <article class="card"><img loading="lazy" src="halloween/plate-sword-garden.webp" alt="Vaporwave gothic garden: swords planted among black roses, pink peonies and cyan lilies under a huge striped purple and orange sun, with glowing purple eyes in the trees"><div class="card pad"><h3>III. The Sword Garden</h3><p>Where the two worlds marry: gothic blades planted like gravestones among impossible flowers, under a striped vapor sun that never quite sets.</p></div></article>
+    </div>
+  </section>
+
+  <!-- AMBIENCE -->
+  <section id="ambience">
+    <div class="sec-head"><h2>Ambience lab</h2><p>EVERYTHING RUNS LOCALLY IN THIS ONE PAGE</p></div>
+    <div class="toggles">
+      <div class="toggle"><div><h3>Low drone</h3><p id="droneStatus">A layered low hum — 55 / 110 / 165 / 220 Hz stack, built to be heard on a phone speaker, not just headphones. Tap Start and turn your volume up; check the silent switch if you hear nothing.</p></div><button class="btn" id="droneBtn">Start</button></div>
+      <div class="toggle song-card"><div style="flex:1;min-width:0"><h3>Heartbeat song — drums &amp; synths</h3><p id="drumStatus">One song in four stages: an irregular low heartbeat first, then a low synth moves in under it, a high synth starts answering, and on Oct 30–31 every layer plays at once — the Halloween finale. Tap Start and turn your volume up.</p><div class="song-layers" id="songLayers" aria-label="Which song layers are playing"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn mini on" id="synthLowBtn" aria-pressed="true">▼ Low synth · On</button><button class="btn mini on" id="synthHighBtn" aria-pressed="true">▲ High synth · On</button></div></div><button class="btn" id="drumBtn">Start</button></div>
+      <div class="toggle"><div><h3>CRT scanlines</h3><p>Old-monitor grain over the whole haunting. On by default — kill it here if your eyes need mercy.</p></div><button class="btn on" id="scanBtn">Disable</button></div>
+      <div class="toggle"><div><h3>Whisper engine</h3><p>Rotating lines in the Eye panel above.</p></div><button class="btn on" id="whisperBtn">On</button></div>
+      <div class="toggle"><div><h3>Spiral field (Three.js)</h3><p>4,200 points winding forever inward — in reverse — behind this page. Pauses when the tab hides; capped for phones.</p></div><button class="btn on" id="glBtn">On</button></div>
+    </div>
+  </section>
+
+  
+
+  <footer>
+    <span><span class="spiral-badge">🌀</span>&nbsp; Built for the Neocities Halloween takeover — original homage artwork, no lifted plates.</span>
+    <span style="font-family:'Space Mono',monospace;font-size:12px"><a href="index.html">← BACK TO THE HUB</a> · FINAL FORM · OCT 31 · HALLOWEEN</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+/* ---------- countdown ---------- */
+var target=new Date("2026-10-31T00:00:00-05:00").getTime();
+function pad(n){return String(n).padStart(2,"0")}
+function tickClock(){
+  var now=new Date();
+  $("clock").textContent=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+  var diff=Math.max(0,target-Date.now()), s=Math.floor(diff/1000);
+  var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),ss=s%60;
+  $("cdD").textContent=d; $("cdH").textContent=pad(h); $("cdM").textContent=pad(m); $("cdS").textContent=pad(ss);
+  $("cdTop").textContent=d+"d "+h+"h";
+}
+setInterval(tickClock,1000); tickClock();
+
+/* ---------- day/night ---------- */
+var KEY=[
+ {h:0, name:"Deep Night", bg:[7,6,11], sky:"Ink black", desc:"The spiral turns fastest in the dark. Eyes are at full glow; the page whispers."},
+ {h:5, name:"Deep Night", bg:[7,6,11], sky:"Ink black", desc:"The spiral turns fastest in the dark. Eyes are at full glow; the page whispers."},
+ {h:6.5,name:"Dawn", bg:[43,26,44], sky:"Bruised violet", desc:"A wound of pink light on the horizon. The ink hasn't dried; the neon hasn't slept."},
+ {h:8, name:"Day — The Plate", bg:[239,230,208], sky:"Bone paper", desc:"Full exposure. Black hatching on bone white, red rays sharp as pins. Nothing can hide — which is its own horror."},
+ {h:17,name:"Day — The Plate", bg:[239,230,208], sky:"Bone paper", desc:"Full exposure. Black hatching on bone white, red rays sharp as pins. Nothing can hide — which is its own horror."},
+ {h:18.5,name:"Golden Dusk", bg:[74,32,32], sky:"Ember & gold", desc:"The vapor sun drops its stripes across the garden. Swords throw shadows twice their length."},
+ {h:20,name:"Twilight", bg:[22,14,38], sky:"Ultraviolet", desc:"Purple hour. Flowers phosphoresce, lilies go cyan, and the trees grow eyes."},
+ {h:22,name:"Night", bg:[10,8,18], sky:"Near black", desc:"Neon rules now. Every accent you picked burns at full charge."},
+ {h:24,name:"Deep Night", bg:[7,6,11], sky:"Ink black", desc:"The spiral turns fastest in the dark."}
+];
+function lerp(a,b,t){return a+(b-a)*t}
+function phaseAt(h){
+  for(var i=0;i<KEY.length-1;i++){ if(h>=KEY[i].h && h<KEY[i+1].h){ var a=KEY[i],b=KEY[i+1],t=(h-a.h)/((b.h-a.h)||1);
+    return {name:t<.5?a.name:b.name, desc:t<.5?a.desc:b.desc, sky:t<.5?a.sky:b.sky,
+      bg:[lerp(a.bg[0],b.bg[0],t),lerp(a.bg[1],b.bg[1],t),lerp(a.bg[2],b.bg[2],t)], dayness: h>7.2&&h<17.2?1:(h>6&&h<19? .45:0)};}}
+  return KEY[0];
+}
+var mode="auto", manualHour=null, playing=null;
+var accentHex="#00f0ff";
+function applyHour(h){
+  var p=phaseAt(h), isDay=p.dayness>.6;
+  document.body.classList.toggle("day",isDay);
+  document.body.style.background="rgb("+p.bg.map(Math.round).join(",")+")";
+  $("phaseName").textContent=p.name; $("phaseDesc").textContent=p.desc;
+  $("phaseTop").textContent=p.name; $("platePhase").textContent=p.name.toUpperCase();
+  $("skyRead").textContent=p.sky;
+  $("spiralRead").textContent=isDay?"Ink dust, slow":"Neon, reverse";
+  $("hourLabel").textContent=pad(Math.floor(h))+":"+pad(Math.floor((h%1)*60));
+  var isNight=(h<6||h>=18.5);
+  var tt=isNight?(((h+24-18.5)%24)/11.5):((h-6)/12.5); tt=Math.max(0,Math.min(1,tt));
+  var cx=20+tt*280, cy=160-Math.sin(Math.PI*tt)*128;
+  var orb=$("orb"); orb.setAttribute("cx",cx); orb.setAttribute("cy",cy);
+  orb.setAttribute("fill", isNight?"#cfd6ff":(h<8||h>17?"#ff7a3c":"#ffb320"));
+  orb.setAttribute("r", isNight?13:17);
+  if(window.__spiralMat){ window.__spiralMat.opacity=isDay?.35:.95; }
+}
+function liveHour(){var n=new Date();return n.getHours()+n.getMinutes()/60}
+function refresh(){ var lh=liveHour(); if(mode==="auto") $("hourRange").value=lh; applyHour(mode==="auto"?lh:(manualHour!=null?manualHour:(mode==="day"?12:23))); }
+$("hourRange").addEventListener("input",function(){ mode="manual"; manualHour=parseFloat(this.value); setAutoUI(); refresh(); });
+$("liveBtn").addEventListener("click",function(){ mode="auto"; if(playing){clearInterval(playing);playing=null;$("playBtn").textContent="▶ Play a full day in 24s"} setAutoUI(); refresh(); });
+function setAutoUI(){ $("autoBtn").classList.toggle("on",mode==="auto"); $("dayBtn").classList.toggle("on",mode==="day"); $("nightBtn").classList.toggle("on",mode==="night"); }
+$("autoBtn").addEventListener("click",function(){mode="auto";setAutoUI();refresh()});
+$("dayBtn").addEventListener("click",function(){mode="day";manualHour=12;$("hourRange").value=12;setAutoUI();refresh()});
+$("nightBtn").addEventListener("click",function(){mode="night";manualHour=23;$("hourRange").value=23;setAutoUI();refresh()});
+$("playBtn").addEventListener("click",function(){
+  if(playing){clearInterval(playing);playing=null;this.textContent="▶ Play a full day in 24s";return}
+  this.textContent="■ Stop the day"; mode="manual"; setAutoUI();
+  var h=parseFloat($("hourRange").value);
+  playing=setInterval(function(){ h=(h+0.24)%24; manualHour=h; $("hourRange").value=h; applyHour(h); },240);
+});
+setInterval(function(){ if(mode==="auto") refresh(); },30000);
+refresh();
+
+/* ---------- eyes ---------- */
+var EYES=[
+ {n:"Cyan — Lock-Screen", c:"#00f0ff", note:"Cyan — the lock-screen light. Cold, electric, impossible to ignore at 9:08 PM.", w:"“You felt that, didn't you? Something just looked back.”"},
+ {n:"Blood Red", c:"#ff2020", note:"Red — the burning eye. The one that never blinks first.", w:"“Blink, and I'll still be here when you open them.”"},
+ {n:"Acid Yellow", c:"#ffe600", note:"Yellow — headlights in a tunnel that has no road.", w:"“Follow the yellow. Everyone does, eventually.”"},
+ {n:"Vine Green", c:"#39ff5a", note:"Green — the cracks in her face, growing a little every night.", w:"“The vines aren't on her. The vines are her.”"},
+ {n:"Ultraviolet", c:"#9b30ff", note:"Purple — the eyes in the trees. Plural. Always plural.", w:"“Count the eyes in the garden. Now count again.”"},
+ {n:"Vapor Pink", c:"#ff2ea6", note:"Pink — peonies and lashes, sweet right up until it's not.", w:"“Pretty things bloom deepest in the dark.”"},
+ {n:"Sunset Blue", c:"#2e7bff", note:"Blue — the hour just before the eyes turn purple.", w:"“Hold this blue a moment longer. It won't last.”"}
+];
+var sw=$("swatches"), whisperOn=true, wi=0;
+EYES.forEach(function(e,i){
+  var b=document.createElement("button"); b.className="swatch"+(i===0?" sel":""); b.style.background=e.c; b.title=e.n; b.setAttribute("aria-label","Set eye glow to "+e.n);
+  b.addEventListener("click",function(){
+    document.querySelectorAll(".swatch").forEach(function(x){x.classList.remove("sel")}); b.classList.add("sel");
+    document.documentElement.style.setProperty("--accent",e.c);
+    $("eyeNote").textContent=e.note; $("whisper").textContent=e.w; wi=i; accentHex=e.c;
+    if(window.__spiralMat && window.__spiralMat.color) window.__spiralMat.color.set(e.c);
+  });
+  sw.appendChild(b);
+});
+var wl=document.createElement("div"); wl.className="swatch-label"; wl.textContent="TAP A COLOUR — THE WHOLE PAGE OBEYS IT"; sw.appendChild(wl);
+setInterval(function(){ if(!whisperOn) return; wi=(wi+1)%EYES.length; $("whisper").style.opacity=0; setTimeout(function(){ $("whisper").textContent=EYES[wi].w; $("whisper").style.opacity=1; },500); },7000);
+$("whisperBtn").addEventListener("click",function(){ whisperOn=!whisperOn; this.textContent=whisperOn?"On":"Off"; this.classList.toggle("on",whisperOn); $("whisper").style.display=whisperOn?"grid":"none"; });
+
+/* ---------- rollout / dread ---------- */
+var DAYS=[
+ {d:"Tue · Oct 27 — Tonight", t:"Level 1 · Ink", c:"#b8b0c9", p:"Foundation lands: palette, type, the cycle, this preview. The dread is only a sketch. The song is just a heartbeat — two low bones in the dark.", s:"YOU ARE HERE"},
+ {d:"Wed · Oct 28", t:"Level 2 · Colour", c:"#00f0ff", p:"The colorized wash spreads page to page. Eyes appear in headers. The garden is planted. A low synth moves in under the heartbeat.", s:"TOMORROW"},
+ {d:"Thu · Oct 29", t:"Level 3 · Atmosphere", c:"#ff2ea6", p:"Fog, whispers, the spiral field. Pages stop being documents and start being places. A high synth starts answering the drums from above.", s:"LOCKED IN INK"},
+ {d:"Fri · Oct 30 → Sat · Oct 31", t:"Level 4 · Halloween", c:"#e8262f", p:"Final form. Full glow, fastest spiral, every eye open at once. Nothing held back — and the song arrives whole: heartbeat, both synths, and a slow minor pad, all at once.", s:"HALLOWEEN"}
+];
+var daysEl=$("days");
+DAYS.forEach(function(dd,i){
+  var b=document.createElement("button"); b.className="day-card"+(i===0?" sel":""); b.style.setProperty("--c",dd.c);
+  b.innerHTML='<div class="d"></div><h3></h3><p></p><div class="state"></div>';
+  b.children[0].textContent=dd.d; b.children[1].textContent=dd.t; b.children[2].textContent=dd.p; b.children[3].textContent=(i===0?"● ":"○ ")+dd.s;
+  b.addEventListener("click",function(){
+    document.querySelectorAll(".day-card").forEach(function(x){x.classList.remove("sel")}); b.classList.add("sel");
+    document.body.className=document.body.className.replace(/dread-\d/,"dread-"+(i+1));
+    document.documentElement.style.setProperty("--dread",i+1);
+    $("dreadRead").textContent="Showcase: "+dd.t+" — "+dd.p;
+    if(window.__spiralSpeed) window.__spiralSpeed.v=0.0015+(i*0.0022);
+  });
+  daysEl.appendChild(b);
+});
+
+/* ---------- ambience toggles ---------- */
+$("scanBtn").addEventListener("click",function(){ var on=document.body.classList.toggle("fx-scan"); this.textContent=on?"Disable":"Enable"; this.classList.toggle("on",on); });
+var actx=null, drone=null, droneFallback=null, droneWavUrl=null;
+function droneStatus(msg){ var s=$("droneStatus"); if(s) s.textContent=msg; }
+function makeDroneWavUrl(){
+  if(droneWavUrl) return droneWavUrl;
+  try{
+    var sr=22050, dur=6, len=sr*dur, buf=new Int16Array(len);
+    /* Integer-cycle frequencies so the 6s loop is seamless. The 110/111 Hz pair
+       gives a slow 1 Hz beat; the higher partials are what a phone speaker
+       can actually reproduce — a pure 55 Hz sine is silent on most phones. */
+    var parts=[[55,.22],[110,.34],[111,.30],[165,.20],[220,.14],[275,.07]];
+    for(var i=0;i<len;i++){
+      var t=i/sr, v=0, trem=1+0.16*Math.sin(2*Math.PI*(1/6)*t);
+      for(var j=0;j<parts.length;j++) v+=Math.sin(2*Math.PI*parts[j][0]*t)*parts[j][1];
+      v=v*trem*0.82; if(v>1)v=1; if(v<-1)v=-1; buf[i]=Math.round(v*32767);
+    }
+    var ab=new ArrayBuffer(44+len*2), dv=new DataView(ab);
+    function ws(off,str){ for(var k=0;k<str.length;k++) dv.setUint8(off+k,str.charCodeAt(k)); }
+    ws(0,"RIFF"); dv.setUint32(4,36+len*2,true); ws(8,"WAVEfmt "); dv.setUint32(16,16,true);
+    dv.setUint16(20,1,true); dv.setUint16(22,1,true); dv.setUint32(24,sr,true); dv.setUint32(28,sr*2,true);
+    dv.setUint16(32,2,true); dv.setUint16(34,16,true); ws(36,"data"); dv.setUint32(40,len*2,true);
+    for(var m=0;m<len;m++) dv.setInt16(44+m*2,buf[m],true);
+    droneWavUrl=URL.createObjectURL(new Blob([ab],{type:"audio/wav"}));
+    return droneWavUrl;
+  }catch(e){ return null; }
+}
+function stopDrone(btn){
+  if(droneFallback){ try{droneFallback.pause();}catch(e){} droneFallback=null; }
+  if(drone&&actx){
+    var d=drone; drone=null;
+    try{
+      var t=actx.currentTime;
+      d.master.gain.cancelScheduledValues(t);
+      d.master.gain.setValueAtTime(Math.max(d.master.gain.value,0.0001),t);
+      d.master.gain.exponentialRampToValueAtTime(0.0001,t+0.35);
+      setTimeout(function(){
+        d.nodes.forEach(function(n){ try{n.stop()}catch(e){} try{n.disconnect()}catch(e){} });
+        try{d.master.disconnect();}catch(e){} try{d.comp.disconnect();}catch(e){}
+      },420);
+    }catch(e){
+      d.nodes.forEach(function(n){ try{n.stop()}catch(err){} });
+    }
+  }
+  if(btn){ btn.textContent="Start"; btn.classList.remove("on"); }
+  droneStatus("Stopped. Tap Start and turn your volume up — the hum is layered at 110–220 Hz so a phone speaker can play it.");
+}
+function startDroneFallback(btn,reason){
+  var url=makeDroneWavUrl();
+  if(!url){ droneStatus("Audio isn't available in this browser right now."); if(btn){btn.textContent="Start";btn.classList.remove("on");} return; }
+  droneFallback=new Audio(url); droneFallback.loop=true; droneFallback.volume=0.95;
+  var p=droneFallback.play();
+  if(p&&p.catch) p.catch(function(){ droneStatus("The player was blocked — tap Stop, then Start again."); });
+  droneStatus("Playing (fallback player) — low hum at 110 / 165 / 220 Hz. Turn volume up; if still silent, flip the silent switch off.");
+  if(btn){ btn.textContent="Stop"; btn.classList.add("on"); }
+}
+$("droneBtn").addEventListener("click",function(){
+  var btn=this;
+  if(drone||droneFallback){ stopDrone(btn); return; }
+  btn.textContent="Starting…";
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no webaudio");
+    if(!actx||actx.state==="closed") actx=new AC();
+    var startWebAudio=function(){
+      if(!actx||actx.state!=="running"){ startDroneFallback(btn,"suspended"); return; }
+      try{
+        var t=actx.currentTime;
+        var comp=actx.createDynamicsCompressor();
+        comp.threshold.value=-18; comp.ratio.value=6; comp.connect(actx.destination);
+        var master=actx.createGain(); master.gain.setValueAtTime(0.0001,t);
+        /* Fade to a clearly audible level — the old build sat at 0.05 with a
+           pure 55 Hz tone, which phone speakers physically cannot reproduce. */
+        master.gain.exponentialRampToValueAtTime(0.26,t+1.4);
+        master.connect(comp);
+        var nodes=[], filt=actx.createBiquadFilter(); filt.type="lowpass"; filt.frequency.value=420; filt.Q.value=0.6; filt.connect(master); nodes.push(filt);
+        function voice(type,freq,gainVal,toFilter){
+          var o=actx.createOscillator(), og=actx.createGain();
+          o.type=type; o.frequency.value=freq; og.gain.value=gainVal;
+          o.connect(og); og.connect(toFilter?filt:master); o.start(); nodes.push(o); return o;
+        }
+        voice("sine",55,0.55,false);       /* sub — felt on headphones / big speakers */
+        voice("sine",110,0.85,false);      /* root — audible everywhere */
+        voice("sine",111,0.75,false);      /* detuned root — slow beating */
+        voice("triangle",165,0.42,false);  /* fifth — carries on phone speakers */
+        voice("sine",220,0.30,false);      /* octave — carries on phone speakers */
+        voice("sawtooth",110,0.16,true);   /* grit through the lowpass */
+        voice("sawtooth",220.5,0.08,true);
+        var lfo=actx.createOscillator(), lg=actx.createGain();
+        lfo.type="sine"; lfo.frequency.value=0.09; lg.gain.value=0.055;
+        lfo.connect(lg); lg.connect(master.gain); lfo.start(); nodes.push(lfo);
+        var lfo2=actx.createOscillator(), lg2=actx.createGain();
+        lfo2.type="sine"; lfo2.frequency.value=0.13; lg2.gain.value=110;
+        lfo2.connect(lg2); lg2.connect(filt.frequency); lfo2.start(); nodes.push(lfo2);
+        drone={master:master,comp:comp,nodes:nodes};
+        btn.textContent="Stop"; btn.classList.add("on");
+        droneStatus("Playing — low hum at 110 / 165 / 220 Hz over a 55 Hz sub. If you hear nothing, raise the volume and check the silent switch.");
+      }catch(e){ startDroneFallback(btn,"webaudio-error"); }
+    };
+    var rp=actx.resume();
+    if(rp&&rp.then) rp.then(function(){ setTimeout(startWebAudio,60); }).catch(function(){ startDroneFallback(btn,"resume-rejected"); });
+    else setTimeout(startWebAudio,60);
+  }catch(e){ startDroneFallback(btn,"no-webaudio"); }
+});
+
+/* ---------- heartbeat song — drums + synths, building to the Halloween finale ---------- */
+/* One song in four stages, all in D minor so the days stack into a single
+   piece instead of four separate loops. The heartbeat (low toms) is there
+   from night one and stays deliberately irregular — a club arrhythmia, with
+   a little timing wobble on every step. A low synth moves in under it on
+   Oct 28, a high synth starts answering on Oct 29, and on Oct 30–31 every
+   layer plays at once over a slow minor pad: the finale arrangement. The
+   wobble tightens in the finale, so the arrhythmia locks into a groove. */
+var SONG_STAGES=[
+ {label:"Oct 27", name:"Two Bones", stage:"Stage 1 of 4 · Heartbeat only", stepMs:580,
+  drums:[73.42,null,null,55,null,73.42,null,null],
+  bass:[null,null,null,null,null,null,null,null],
+  lead:[null,null,null,null,null,null,null,null],
+  pad:null,
+  desc:"The heartbeat alone — two low toms (D2 · A1) and a lot of dark between them. Lub … dub … lub. Nothing accompanies it yet."},
+ {label:"Oct 28", name:"Three Toms Calling", stage:"Stage 2 of 4 · Heartbeat + low synth", stepMs:520,
+  drums:[73.42,87.31,55,87.31,73.42,87.31,55,null],
+  bass:[36.71,null,null,43.65,null,55,null,null],
+  lead:[null,null,null,null,null,null,null,null],
+  pad:null,
+  desc:"The heartbeat (D2 · F2 · A1) firms up, and a low saw synth moves in underneath, holding D and F like a floor. First accompaniment."},
+ {label:"Oct 29", name:"Undertow", stage:"Stage 3 of 4 · + High synth", stepMs:480,
+  drums:[65.41,null,77.78,null,65.41,null,49,null,65.41,77.78,null,49],
+  bass:[32.70,null,null,38.89,null,null,32.70,null,null,49,null,null],
+  lead:[null,null,null,null,293.66,null,null,311.13,null,null,261.63,null],
+  pad:null,
+  desc:"Heartbeat and low synth sink to C, and a high synth starts answering from above — sparse D4 · E♭4 · C4 echoes through a short delay. Three layers, still holding back."},
+ {label:"Oct 30 → 31 · Halloween", name:"Four Graves — Halloween Finale", stage:"Finale · Full arrangement", stepMs:420,
+  drums:[55,73.42,87.31,65.41,87.31,73.42,55,65.41,73.42,55,87.31,98,87.31,73.42,65.41,49],
+  bass:[27.50,null,36.71,null,43.65,null,32.70,null,27.50,null,36.71,null,43.65,49,36.71,null],
+  lead:[220,null,293.66,349.23,null,329.63,293.66,261.63,293.66,null,349.23,440,392,349.23,293.66,null],
+  pad:[146.83,174.61,220],
+  desc:"Everything at once: the heartbeat at full density, the low synth driving A · D · F · C underneath, the high synth playing the whole melody (A3 up to A4 and back down), and a slow D-minor pad breathing under all of it. The arrhythmia locks into the groove. This is the final form."}
+];
+function dateDrumIndex(){
+  var n=new Date(), m=n.getMonth(), d=n.getDate();
+  if(m<9) return 0; if(m>9) return 3;
+  if(d<=27) return 0; if(d===28) return 1; if(d===29) return 2; return 3;
+}
+var drumIndex=dateDrumIndex(), drumTimer=null, drumBus=null, drumStep=0, drumLive=[];
+var songDelay=null, songFx=[], lowSynthOn=true, highSynthOn=true;
+function drumStatus(msg){ var s=$("drumStatus"); if(s) s.textContent=msg; }
+function songIdleText(){
+  var s=SONG_STAGES[drumIndex];
+  return s.label+" — “"+s.name+"” ("+s.stage+"). "+s.desc+" Tap Start; turn volume up and check the silent switch if you hear nothing.";
+}
+function songPlayingText(){
+  var s=SONG_STAGES[drumIndex];
+  return "Playing — "+s.label+" — “"+s.name+"” ("+s.stage+"). "+s.desc+" It runs beside the drone if both are on.";
+}
+function renderLayers(){
+  var el=$("songLayers"); if(!el) return;
+  var s=SONG_STAGES[drumIndex];
+  var hasBass=s.bass.some(function(x){return !!x}), hasLead=s.lead.some(function(x){return !!x});
+  var chips=[{t:"♥ Heartbeat drums", cls:"on"}];
+  if(hasBass) chips.push({t:"▼ Low synth", cls:lowSynthOn?"on":"off"});
+  else chips.push({t:"▼ Low synth · arrives Oct 28", cls:"soon"});
+  if(hasLead) chips.push({t:"▲ High synth", cls:highSynthOn?"on":"off"});
+  else chips.push({t:"▲ High synth · arrives Oct 29", cls:"soon"});
+  if(s.pad) chips.push({t:"✦ Halloween pad", cls:lowSynthOn?"on":"off"});
+  el.innerHTML="";
+  chips.forEach(function(c){ var sp=document.createElement("span"); sp.className="chip "+c.cls; sp.textContent=c.t; el.appendChild(sp); });
+}
+function updateSynthBtns(){
+  var lb=$("synthLowBtn"), hb=$("synthHighBtn");
+  if(lb){ lb.textContent="▼ Low synth · "+(lowSynthOn?"On":"Off"); lb.classList.toggle("on",lowSynthOn); lb.setAttribute("aria-pressed",lowSynthOn?"true":"false"); }
+  if(hb){ hb.textContent="▲ High synth · "+(highSynthOn?"On":"Off"); hb.classList.toggle("on",highSynthOn); hb.setAttribute("aria-pressed",highSynthOn?"true":"false"); }
+}
+var synthLowBtnEl=$("synthLowBtn"), synthHighBtnEl=$("synthHighBtn");
+if(synthLowBtnEl) synthLowBtnEl.addEventListener("click",function(){ lowSynthOn=!lowSynthOn; updateSynthBtns(); renderLayers(); if(!drumTimer) drumStatus(songIdleText()); });
+if(synthHighBtnEl) synthHighBtnEl.addEventListener("click",function(){ highSynthOn=!highSynthOn; updateSynthBtns(); renderLayers(); if(!drumTimer) drumStatus(songIdleText()); });
+drumStatus(songIdleText()); renderLayers(); updateSynthBtns();
+/* One scheduler step: every layer whose notes exist (and whose toggle is on)
+   plays together, so switching days mid-playback rebuilds the arrangement
+   live. The step delay wobbles on purpose — that's the arrhythmia. */
+function playStep(idx){
+  var song=SONG_STAGES[drumIndex], L=song.drums.length, i=((idx%L)+L)%L;
+  if(song.drums[i]) drumHit(song.drums[i]);
+  if(lowSynthOn){
+    if(song.bass[i]) synthBass(song.bass[i]);
+    if(song.pad && i%8===0) padHit(song.pad);
+  }
+  if(highSynthOn && song.lead[i]) synthLead(song.lead[i]);
+}
+function scheduleSong(){
+  if(drumTimer){ clearTimeout(drumTimer); drumTimer=null; }
+  var tick=function(){
+    playStep(drumStep); drumStep++;
+    var song=SONG_STAGES[drumIndex];
+    var wobble=(drumIndex===3?9:22);
+    drumTimer=setTimeout(tick, song.stepMs+(Math.random()*wobble*2-wobble));
+  };
+  drumTimer=setTimeout(tick, SONG_STAGES[drumIndex].stepMs);
+}
+/* Tapping a day in The Slow Reveal advances the song to that day's stage. */
+document.querySelectorAll(".day-card").forEach(function(card,i){
+  card.addEventListener("click",function(){
+    var wasPlaying=!!drumTimer;
+    drumIndex=i; drumStep=0; renderLayers();
+    if(wasPlaying){ scheduleSong(); drumStatus(songPlayingText()); }
+    else drumStatus(songIdleText());
+  });
+});
+function drumHit(freq){
+  if(!actx||!drumBus) return;
+  try{
+    var t=actx.currentTime;
+    /* Body: a sine that drops in pitch — the classic synthesized tom/kick.
+       Fundamental sits low, so a harmonic triangle rides on top at 2× and 3×:
+       that's the part a phone speaker can actually reproduce. */
+    var o=actx.createOscillator(), og=actx.createGain();
+    o.type="sine";
+    o.frequency.setValueAtTime(freq*2.4,t);
+    o.frequency.exponentialRampToValueAtTime(freq,t+0.07);
+    o.frequency.exponentialRampToValueAtTime(Math.max(freq*0.52,24),t+0.38);
+    og.gain.setValueAtTime(0.0001,t);
+    og.gain.exponentialRampToValueAtTime(0.95,t+0.006);
+    og.gain.exponentialRampToValueAtTime(0.0001,t+0.46);
+    o.connect(og); og.connect(drumBus); o.start(t); o.stop(t+0.5);
+    var h=actx.createOscillator(), hg=actx.createGain();
+    h.type="triangle"; h.frequency.setValueAtTime(freq*2,t);
+    h.frequency.exponentialRampToValueAtTime(freq*1.4,t+0.12);
+    hg.gain.setValueAtTime(0.0001,t);
+    hg.gain.exponentialRampToValueAtTime(0.34,t+0.005);
+    hg.gain.exponentialRampToValueAtTime(0.0001,t+0.2);
+    h.connect(hg); hg.connect(drumBus); h.start(t); h.stop(t+0.24);
+    drumLive.push(o,h);
+    if(drumLive.length>48){ drumLive.splice(0,drumLive.length-48).forEach(function(n){ try{n.disconnect()}catch(e){} }); }
+  }catch(e){}
+}
+/* Low synth: a saw an octave under the heartbeat with its 2nd harmonic —
+   the harmonics are what a phone speaker can actually reproduce — through a
+   lowpass, held long so it feels like a floor under the drums, not a note. */
+function synthBass(freq){
+  if(!actx||!drumBus) return;
+  try{
+    var t=actx.currentTime;
+    var filt=actx.createBiquadFilter(); filt.type="lowpass"; filt.frequency.value=300+freq*3; filt.Q.value=0.7;
+    var g=actx.createGain();
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.26,t+0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.9);
+    filt.connect(g); g.connect(drumBus);
+    var o=actx.createOscillator(); o.type="sawtooth"; o.frequency.value=freq; o.connect(filt); o.start(t); o.stop(t+0.95);
+    var o2=actx.createOscillator(), g2=actx.createGain();
+    o2.type="sine"; o2.frequency.value=freq*2; g2.gain.value=0.5;
+    o2.connect(g2); g2.connect(filt); o2.start(t); o2.stop(t+0.95);
+    drumLive.push(o,o2,filt);
+  }catch(e){}
+}
+/* High synth: a bright triangle pluck with a touch of vibrato, sent dry to
+   the bus and wet into the shared echo — it should sound like it's answering
+   the heartbeat from somewhere above it. */
+function synthLead(freq){
+  if(!actx||!drumBus) return;
+  try{
+    var t=actx.currentTime;
+    var o=actx.createOscillator(); o.type="triangle"; o.frequency.value=freq;
+    var lfo=actx.createOscillator(), lg=actx.createGain();
+    lfo.type="sine"; lfo.frequency.value=5.5; lg.gain.value=freq*0.004;
+    lfo.connect(lg); lg.connect(o.frequency); lfo.start(t); lfo.stop(t+0.55);
+    var g=actx.createGain();
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.17,t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.52);
+    o.connect(g); g.connect(drumBus);
+    if(songDelay) g.connect(songDelay);
+    var o2=actx.createOscillator(), g2=actx.createGain();
+    o2.type="sine"; o2.frequency.value=freq*2; g2.gain.value=0.35;
+    o2.connect(g2); g2.connect(g); o2.start(t); o2.stop(t+0.55);
+    o.start(t); o.stop(t+0.55);
+    drumLive.push(o,o2,lfo);
+  }catch(e){}
+}
+/* Finale pad: the D-minor chord, breathed in slowly under everything. */
+function padHit(chord){
+  if(!actx||!drumBus) return;
+  try{
+    var t=actx.currentTime;
+    chord.forEach(function(freq){
+      var o=actx.createOscillator(), g=actx.createGain();
+      o.type="triangle"; o.frequency.value=freq;
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.linearRampToValueAtTime(0.05,t+0.45);
+      g.gain.setValueAtTime(0.05,t+2.2);
+      g.gain.linearRampToValueAtTime(0.0001,t+3.4);
+      o.connect(g); g.connect(drumBus); o.start(t); o.stop(t+3.5);
+      drumLive.push(o);
+    });
+  }catch(e){}
+}
+function stopDrum(btn){
+  if(drumTimer){ clearTimeout(drumTimer); drumTimer=null; }
+  drumLive.forEach(function(n){ try{n.stop()}catch(e){} try{n.disconnect()}catch(e){} }); drumLive=[];
+  var fx=songFx; songFx=[]; songDelay=null;
+  if(drumBus&&actx){
+    var bus=drumBus; drumBus=null;
+    try{
+      var t=actx.currentTime;
+      bus.gain.cancelScheduledValues(t);
+      bus.gain.setValueAtTime(Math.max(bus.gain.value,0.0001),t);
+      bus.gain.exponentialRampToValueAtTime(0.0001,t+0.2);
+      setTimeout(function(){ try{bus.disconnect()}catch(e){} fx.forEach(function(n){ try{n.disconnect()}catch(e){} }); },260);
+    }catch(e){ try{bus.disconnect()}catch(err){} fx.forEach(function(n){ try{n.disconnect()}catch(e){} }); }
+  } else {
+    fx.forEach(function(n){ try{n.disconnect()}catch(e){} });
+  }
+  if(btn){ btn.textContent="Start"; btn.classList.remove("on"); }
+  drumStatus(songIdleText());
+}
+$("drumBtn").addEventListener("click",function(){
+  var btn=this;
+  if(drumTimer){ stopDrum(btn); return; }
+  btn.textContent="Starting…";
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) throw new Error("no webaudio");
+    if(!actx||actx.state==="closed") actx=new AC();
+    var begin=function(){
+      if(!actx||actx.state!=="running"){
+        btn.textContent="Start"; btn.classList.remove("on");
+        drumStatus("Audio was blocked before it could start — tap Start again, and check the silent switch / volume if it stays quiet.");
+        return;
+      }
+      try{
+        var comp=actx.createDynamicsCompressor();
+        comp.threshold.value=-16; comp.ratio.value=8; comp.connect(actx.destination);
+        drumBus=actx.createGain(); drumBus.gain.value=0.9; drumBus.connect(comp);
+        /* Shared echo for the high synth — short, dark, club-corridor. */
+        songDelay=actx.createDelay(1.0); songDelay.delayTime.value=0.27;
+        var fb=actx.createGain(); fb.gain.value=0.32;
+        var wet=actx.createGain(); wet.gain.value=0.25;
+        songDelay.connect(fb); fb.connect(songDelay);
+        songDelay.connect(wet); wet.connect(drumBus);
+        songFx=[songDelay,fb,wet];
+        drumStep=0;
+        playStep(0); drumStep=1;
+        scheduleSong();
+        btn.textContent="Stop"; btn.classList.add("on");
+        drumStatus(songPlayingText());
+      }catch(e){
+        btn.textContent="Start"; btn.classList.remove("on");
+        drumStatus("Audio isn't available in this browser right now.");
+      }
+    };
+    var rp=actx.resume();
+    if(rp&&rp.then) rp.then(function(){ setTimeout(begin,60); }).catch(function(){ btn.textContent="Start"; drumStatus("Audio was blocked — tap Start again."); });
+    else setTimeout(begin,60);
+  }catch(e){
+    btn.textContent="Start"; btn.classList.remove("on");
+    drumStatus("Audio isn't available in this browser right now.");
+  }
+});
+
+/* ---------- three.js spiral ---------- */
+var glOn=true;
+if(typeof THREE==="undefined"){ $("gl").style.display="none"; var gb=$("glBtn"); if(gb){gb.textContent="Unavailable"; gb.disabled=true;} }
+try{
+  if(typeof THREE==="undefined") throw new Error("no three");
+  var canvas=$("gl"), renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+  var scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(60,1,0.1,100); camera.position.z=16;
+  var N=4200, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  var alt=new THREE.Color(0xff2ea6), base=new THREE.Color();
+  for(var i=0;i<N;i++){ var t=i/N, ang=t*Math.PI*14, r=0.4+t*13;
+    pos[i*3]=Math.cos(ang)*r; pos[i*3+1]=Math.sin(ang)*r; pos[i*3+2]=(Math.random()-0.5)*3;
+    base.set(accentHex).lerp(alt,Math.random()*0.45); col[i*3]=base.r; col[i*3+1]=base.g; col[i*3+2]=base.b; }
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.BufferAttribute(pos,3)); geo.setAttribute("color",new THREE.BufferAttribute(col,3));
+  var mat=new THREE.PointsMaterial({size:0.14,vertexColors:true,transparent:true,opacity:.95,depthWrite:false});
+  window.__spiralMat=mat; window.__spiralSpeed={v:0.0015};
+  var pts=new THREE.Points(geo,mat); scene.add(pts);
+  var mx=0,my=0;
+  window.addEventListener("pointermove",function(e){ mx=(e.clientX/window.innerWidth-0.5); my=(e.clientY/window.innerHeight-0.5); },{passive:true});
+  function size(){ var w=Math.min(window.innerWidth,1600),h=Math.min(window.innerHeight,1000); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  window.addEventListener("resize",size); size();
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (function loop(){
+    requestAnimationFrame(loop);
+    if(!glOn||document.hidden) return;
+    pts.rotation.z-=reduce?0:window.__spiralSpeed.v; /* REVERSED for the Neocities showcase */
+    pts.rotation.x+= (my*0.35-pts.rotation.x)*0.03; pts.rotation.y+=(mx*0.35-pts.rotation.y)*0.03;
+    renderer.render(scene,camera);
+  })();
+  $("glBtn").addEventListener("click",function(){ glOn=!glOn; canvas.style.display=glOn?"block":"none"; this.textContent=glOn?"On":"Off"; this.classList.toggle("on",glOn); });
+}catch(e){ $("gl").style.display="none"; }
+})();
+</script>
+</body>
+</html>
