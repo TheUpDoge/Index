@@ -1,0 +1,129 @@
+/* UPDOGE OS — retro desktop shell. Vaporwave palette, 90s bevels, ASCII everywhere. */
+:root{
+  --bg:#0a0612; --ink:#e9dfc8; --mag:#ff3cac; --cyn:#2de2e6; --vio:#7b2ff7; --gold:#e8c872;
+  --face:#1b0f30; --face2:#25163f; --hi:#9a7cff; --lo:#06030c; --mid:#3a2466;
+  --title-a:#ff3cac; --title-b:#7b2ff7; --title-off-a:#4a3a66; --title-off-b:#2a1d44;
+  --task-h:42px; --mono:"Courier New",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono);overflow:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+a{color:var(--cyn)}
+.bevel{border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi)}
+.bevel-in{border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.crt-on #desk::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 60%,rgba(5,0,15,.6) 100%)}
+
+/* ---------- boot ---------- */
+#boot{position:fixed;inset:0;z-index:100;background:#000;color:#b9ffd8;padding:18px;font-size:clamp(11px,2.4vw,15px);line-height:1.35;cursor:pointer;overflow:hidden}
+#boot pre{margin:0;white-space:pre-wrap;font:inherit;text-shadow:0 0 6px rgba(120,255,190,.45)}
+#boot .logo{color:var(--mag);text-shadow:0 0 10px var(--mag)}
+#boot .ok{color:var(--cyn)}
+#boot .hint{position:absolute;bottom:14px;left:18px;opacity:.6;font-size:12px}
+#boot.done{opacity:0;transition:opacity .35s;pointer-events:none}
+
+/* ---------- desktop ---------- */
+#desk{position:fixed;inset:0 0 var(--task-h) 0;overflow:hidden}
+#wall{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 70%,#2a0f45 0%,#0a0612 70%)}
+#icons{position:absolute;inset:0;z-index:2;padding:10px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,92px);grid-auto-columns:88px;gap:4px 6px;align-content:start;pointer-events:none}
+.ico{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;background:none;border:1px dotted transparent;cursor:pointer;text-align:center;color:var(--ink)}
+.ico .g{width:46px;height:46px;display:grid;place-items:center;font-size:26px;line-height:1;background:linear-gradient(145deg,var(--face2),var(--face));border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);box-shadow:0 0 12px rgba(255,60,172,.18)}
+.ico .l{font-size:11px;line-height:1.15;max-width:84px;padding:1px 4px;background:rgba(7,4,13,.62);text-shadow:0 1px 0 #000,0 0 6px #000;word-break:break-word}
+.ico:focus-visible,.ico.sel{outline:none;border-color:var(--cyn)}
+.ico.sel .l,.ico:focus-visible .l{background:var(--vio);color:#fff}
+.ico:hover .g{box-shadow:0 0 16px rgba(45,226,230,.45)}
+
+/* ---------- windows ---------- */
+#wins{position:absolute;inset:0;z-index:3;pointer-events:none}
+.win{position:absolute;pointer-events:auto;display:flex;flex-direction:column;background:var(--face);min-width:240px;min-height:150px;
+  border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);box-shadow:4px 6px 0 rgba(0,0,0,.45),0 0 26px rgba(123,47,247,.25)}
+.win.max{left:0!important;top:0!important;width:100%!important;height:100%!important;border-width:0;box-shadow:none}
+.win.min{display:none}
+.win.opening{animation:pop .16s ease-out}
+@keyframes pop{from{transform:scale(.94);opacity:.4}to{transform:none;opacity:1}}
+.bar{display:flex;align-items:center;gap:6px;height:26px;padding:0 3px 0 6px;flex:none;cursor:default;user-select:none;-webkit-user-select:none;touch-action:none;
+  background:linear-gradient(90deg,var(--title-off-a),var(--title-off-b));color:#cfc3e6;font-size:12px;font-weight:bold;letter-spacing:1px}
+.win.focus .bar{background:linear-gradient(90deg,var(--title-a),var(--title-b));color:#fff;text-shadow:0 0 6px rgba(0,0,0,.5)}
+.bar .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar button{width:22px;height:19px;padding:0;line-height:1;font-size:12px;background:var(--face2);border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);cursor:pointer;color:var(--ink)}
+.bar button:active{border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.wbody{position:relative;flex:1;min-height:0;background:#07040f;overflow:auto;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);margin:2px}
+.wbody iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#07040f}
+.dragging iframe{pointer-events:none}
+.grip{position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;touch-action:none;
+  background:linear-gradient(135deg,transparent 0 50%,var(--hi) 50% 58%,transparent 58% 70%,var(--hi) 70% 78%,transparent 78%)}
+.win.max .grip{display:none}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--cyn);font-size:13px;pointer-events:none}
+.loading span{animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.wstatus{flex:none;display:flex;gap:8px;justify-content:space-between;font-size:11px;padding:2px 6px;color:#a898c8;border-top:1px solid var(--mid)}
+.wstatus a{color:var(--cyn);text-decoration:none}
+
+/* native app content */
+.pad{padding:12px 14px;font-size:13px;line-height:1.55}
+.pad h2{margin:0 0 6px;font-size:15px;color:var(--mag);letter-spacing:2px}
+.pad p{margin:0 0 10px}
+.pad .dim{color:#a898c8}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding:10px}
+.card{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:8px;background:var(--face2);border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);cursor:pointer;color:var(--ink)}
+.card:hover,.card:focus-visible{outline:1px solid var(--cyn);outline-offset:-4px}
+.card .g{font-size:24px;line-height:1}
+.card b{display:block;color:var(--gold);font-size:13px;margin-bottom:3px}
+.card small{display:block;font-size:11px;line-height:1.4;color:#d8cdea}
+.card .tag{display:inline-block;margin-top:4px;font-size:10px;color:var(--cyn);border:1px solid var(--cyn);padding:0 4px}
+.sect{padding:8px 10px 0;font-size:11px;color:var(--cyn);letter-spacing:2px}
+
+/* terminal */
+.term{position:absolute;inset:0;display:flex;flex-direction:column;background:#020104;color:#b9ffd8;font-size:13px}
+.term .out{flex:1;overflow:auto;padding:8px 10px;white-space:pre-wrap;word-break:break-word;text-shadow:0 0 5px rgba(120,255,190,.35)}
+.term form{display:flex;gap:6px;padding:6px 10px;border-top:1px solid #1d3a2a}
+.term input{flex:1;background:transparent;border:0;outline:0;color:#b9ffd8;font:inherit;caret-color:var(--mag)}
+.term .p{color:var(--mag)}
+
+/* settings */
+.set{display:grid;gap:10px;padding:12px 14px;font-size:13px}
+.set label{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.set select,.set input[type=range]{font:inherit;background:var(--face2);color:var(--gold);border:1px solid var(--gold);accent-color:var(--mag)}
+.set input[type=checkbox]{accent-color:var(--mag);width:18px;height:18px}
+
+/* ---------- taskbar ---------- */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:var(--task-h);z-index:50;display:flex;align-items:center;gap:5px;padding:3px 4px;
+  background:var(--face);border-top:2px solid var(--hi);box-shadow:0 -2px 0 var(--lo) inset}
+#start{display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;font-weight:bold;letter-spacing:2px;cursor:pointer;background:var(--face2);
+  border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);color:var(--mag);text-shadow:0 0 8px rgba(255,60,172,.6)}
+#start[aria-expanded=true]{border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+#tasks{flex:1;display:flex;gap:4px;overflow-x:auto;min-width:0;scrollbar-width:none}
+#tasks button{flex:0 1 170px;min-width:42px;height:32px;padding:0 8px;font-size:12px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;background:var(--face2);
+  border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi)}
+#tasks button.on{border-color:var(--lo) var(--hi) var(--hi) var(--lo);background:#140a24;color:var(--cyn)}
+#tray{display:flex;align-items:center;gap:6px;height:32px;padding:0 8px;font-size:12px;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+#tray button,#tray a{background:none;border:0;padding:0 2px;cursor:pointer;color:var(--ink);text-decoration:none;font-size:13px}
+#tray a:hover,#tray button:hover{color:var(--cyn)}
+#clock{color:var(--gold);min-width:44px;text-align:right}
+
+/* ---------- start menu ---------- */
+#menu{position:fixed;left:4px;bottom:calc(var(--task-h) - 2px);z-index:60;display:flex;width:min(330px,calc(100vw - 8px));max-height:calc(100% - var(--task-h) - 8px);
+  background:var(--face);border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);box-shadow:4px 4px 0 rgba(0,0,0,.5)}
+#menu[hidden]{display:none}
+#menu .side{width:30px;flex:none;background:linear-gradient(0deg,var(--mag),var(--vio));display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+#menu .side span{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:bold;letter-spacing:3px;color:#fff;font-size:15px}
+#menu .side span b{color:var(--gold)}
+#menu ul{list-style:none;margin:0;padding:4px 0;flex:1;overflow:auto}
+#menu li button,#menu li a{display:flex;align-items:center;gap:10px;width:100%;padding:6px 10px;background:none;border:0;text-align:left;cursor:pointer;color:var(--ink);text-decoration:none;font-size:13px}
+#menu li button:hover,#menu li a:hover,#menu li button:focus-visible,#menu li a:focus-visible{background:var(--vio);color:#fff;outline:none}
+#menu li .g{width:22px;text-align:center;font-size:17px}
+#menu li.sep{height:0;margin:4px 6px;border-top:1px solid var(--lo);border-bottom:1px solid var(--hi)}
+#menu .head{padding:6px 10px 2px;font-size:10px;color:var(--cyn);letter-spacing:2px}
+
+/* ---------- shutdown ---------- */
+#off{position:fixed;inset:0;z-index:200;background:#000;display:grid;place-items:center;text-align:center;color:var(--gold);cursor:pointer;padding:20px}
+#off[hidden]{display:none}
+#off pre{font:inherit;font-size:clamp(11px,2.6vw,16px);text-shadow:0 0 10px rgba(232,200,114,.5);white-space:pre-wrap}
+
+@media (max-width:720px){
+  #icons{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));grid-template-rows:none;grid-auto-rows:92px;grid-auto-columns:auto;overflow:auto;pointer-events:auto}
+  #tasks button{flex-basis:110px}
+  .bar{height:34px;font-size:13px}
+  .bar button{width:30px;height:26px;font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){.win.opening{animation:none}#boot.done{transition:none}.loading span{animation:none}}
